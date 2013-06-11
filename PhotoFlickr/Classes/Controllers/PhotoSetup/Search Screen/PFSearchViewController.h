@@ -31,4 +31,5 @@
 -(NSDictionary *)GetInfoPhotoItem:(NSString *)aPhotoID andSecretPhoto:(NSString *)secretPhoto;
 -(void)GetDataPhotoForCell:(int)indexRow;
 -(BOOL)CheckConnectInternet;
+- (NSString*)convertDateStringMySetup:(NSString*)inputDateString;
 @end

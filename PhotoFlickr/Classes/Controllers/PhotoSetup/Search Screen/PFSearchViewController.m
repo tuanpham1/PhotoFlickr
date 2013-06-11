@@ -288,6 +288,8 @@
             
             //Get date photo upload
             NSString *stringDatePhotoUpload = [dictionaryPhotoInfoDates objectForKey:@"taken"];
+            stringDatePhotoUpload = [self convertDateStringMySetup:stringDatePhotoUpload];
+        
             
             //get title photo
             NSString *stringTitlePhoto = [dictionaryPhotoInfoTitle objectForKey:@"text"];
@@ -361,6 +363,15 @@
     }
     
 
+}
+- (NSString*)convertDateStringMySetup:(NSString*)inputDateString{
+    NSString *trimmedString = [inputDateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    //    NSString *string1=[inputDateString stringByAppendingString:@" 00:00:00 +0000"];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate *date1 = [dateFormatter dateFromString:trimmedString];
+    [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
+    return [dateFormatter stringFromDate:date1];
 }
 #pragma mark Table Function
 // table view resuil data
