@@ -51,7 +51,7 @@
     UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:stringSaveNameImage]]];
     self.imageView = [[UIImageView alloc] initWithImage:image];
     self.imageView.frame =
-    (CGRect){.origin=CGPointMake(0.0f, 0.0f), .size=CGSizeMake(1024, 1274)};
+    (CGRect){.origin=CGPointMake(0.0f, 0.0f), .size=CGSizeMake(570, 740)};
     [self.scrollView addSubview:self.imageView];
 
     

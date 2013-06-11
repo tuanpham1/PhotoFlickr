@@ -57,7 +57,6 @@
 		8C874D6F176188120033ECBB /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		8C874D7D176188710033ECBB /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		8C874D7E176188710033ECBB /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		8C874D7F176188710033ECBB /* LogSave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogSave.h; sourceTree = "<group>"; };
 		8C874D84176188710033ECBB /* PFImageDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFImageDetailViewController.h; sourceTree = "<group>"; };
 		8C874D85176188710033ECBB /* PFImageDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFImageDetailViewController.m; sourceTree = "<group>"; };
 		8C874D86176188710033ECBB /* PFImageDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PFImageDetailViewController.xib; sourceTree = "<group>"; };
@@ -177,7 +176,6 @@
 			children = (
 				8C874D7D176188710033ECBB /* AppDelegate.h */,
 				8C874D7E176188710033ECBB /* AppDelegate.m */,
-				8C874D7F176188710033ECBB /* LogSave.h */,
 			);
 			path = AppDelegate;
 			sourceTree = "<group>";

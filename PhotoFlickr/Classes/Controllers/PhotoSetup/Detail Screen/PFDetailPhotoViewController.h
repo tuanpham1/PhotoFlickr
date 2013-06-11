@@ -10,24 +10,15 @@
 
 @interface PFDetailPhotoViewController : UIViewController
 {
-    IBOutlet UIImageView *imageViewAvatarUser;
-    IBOutlet UIImageView *imageViewDetail;
-    IBOutlet UILabel *labelNameUser;
-    IBOutlet UILabel *labelNameUserTrue;
-    IBOutlet UILabel *labelLocationUser;
-    IBOutlet UILabel *labelDateUpload;
-    IBOutlet UILabel *labelViewCount;
-    IBOutlet UITextView *textViewDescription;
-    IBOutlet UILabel *labelTitleComment;
+    IBOutlet UIScrollView *scrollViewAllDetail;
     UILabel *labelTitleImage;
-    IBOutlet UIScrollView *scrollViewComment;
-    IBOutlet UIScrollView *scrollViewScreenComent;
-    NSDictionary *dictionaryDataItem;
     NSMutableArray *mutableArrayComment;
-    UIActivityIndicatorView *activityIndicatorLoadingComment;
-
+    NSMutableArray *mutableArrayDetailPhoto;
+    int indexScrollPage;
+    UIActivityIndicatorView *activityIndicatorviewLoadingSearch;
 }
-- (id)initWithNibName:(NSString *)nibNameOrNil aDictionaryItem:(NSDictionary *)dictionaryItem;
--(void)loadDataComment;
--(NSDictionary *)GetInfoCommentsPhoto:(NSString *)aUserId;
+- (id)initWithNibName:(NSString *)nibNameOrNil aDictionaryItem:(NSDictionary *)dictionaryItem indexPath:(int)indexPath;
+-(NSDictionary *)GetInfoCommentsPhoto:(NSString *)aPhotoId;
+-(void)loadDetailPhoto:(NSDictionary *)aDictionaryPhoto indexOriginX:(float)originX;
+-(void)loadDataComment:(UIScrollView *)aScrollView aActivityComment:(UIActivityIndicatorView *) activityComment;
 @end

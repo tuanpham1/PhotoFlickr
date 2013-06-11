@@ -274,7 +274,6 @@
             NSDictionary *dictionaryPhotoInfoDates = [dictionaryPhotoInfoPhoto objectForKey:@"dates"];
             NSDictionary *dictionaryPhotoInfoTitle = [dictionaryPhotoInfoPhoto objectForKey:@"title"];
             NSDictionary *dictionaryPhotoInfoDescription = [dictionaryPhotoInfoPhoto objectForKey:@"description"];
-            NSDictionary *dictionaryPhotoInfoCommentAll = [dictionaryPhotoInfoPhoto objectForKey:@"tags"];
             NSString *stringViewCountPhoto =         [dictionaryPhotoInfoPhoto objectForKey:@"views"];
             
             //get info user(username, location, url Image)
@@ -337,10 +336,8 @@
             if (stringViewCountPhoto == NULL) {
                 stringViewCountPhoto = @"0";
             }
-            if (dictionaryPhotoInfoCommentAll != NULL) {
-                [mutableDictionaryPhotoItem setObject:dictionaryPhotoInfoCommentAll forKey:@"tags"];
-            }
             
+            [mutableDictionaryPhotoItem setObject:stringPhotoID forKey:@"photoId"];
             [mutableDictionaryPhotoItem setObject:stringTitlePhoto forKey:@"title"];
             [mutableDictionaryPhotoItem setObject:stringNameUser forKey:@"username"];
             [mutableDictionaryPhotoItem setObject:stringRealNameUser forKey:@"realname"];
@@ -433,8 +430,8 @@
         searchBarPhoto.hidden = YES;
         imageViewSearchIcon.hidden = YES;
         [searchBarPhoto resignFirstResponder];
-        NSDictionary *dictionaryPhotoItemCell = [mutableArraySaveDataCell objectAtIndex:indexPath.row];
-        PFDetailPhotoViewController *detailPhotoViewController = [[PFDetailPhotoViewController alloc] initWithNibName:@"PFDetailPhotoViewController" aDictionaryItem:dictionaryPhotoItemCell];
+        NSDictionary *dictionaryPhotoCell = [mutableArraySaveDataCell mutableCopy];
+        PFDetailPhotoViewController *detailPhotoViewController = [[PFDetailPhotoViewController alloc] initWithNibName:@"PFDetailPhotoViewController" aDictionaryItem:dictionaryPhotoCell indexPath:indexPath.row];
         [self.navigationController pushViewController:detailPhotoViewController animated:YES];
         RELEASE_OBJECT(detailPhotoViewController);
     }
