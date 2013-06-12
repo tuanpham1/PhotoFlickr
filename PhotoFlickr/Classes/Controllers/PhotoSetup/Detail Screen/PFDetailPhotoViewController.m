@@ -33,7 +33,6 @@
     RELEASE_OBJECT(labelTitleImage);
     RELEASE_OBJECT(mutableArrayDetailPhoto);
     RELEASE_OBJECT(scrollViewAllDetail);
-    RELEASE_OBJECT(mutableArrayComment);
     
     [super dealloc];
 }
@@ -42,33 +41,43 @@
     [super viewDidLoad];
     
     indexScrollPage = 0;
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_searchBar.png"]];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (ChangerNavigationDetailScreen:) name:@"ChangerNavigationBarDetailScreen" object:nil];
-    
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-searchBar.png"]];
     //get info user(username, location, url Image)
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [button setBackgroundImage:[UIImage imageNamed:@"icon-back.jpeg"] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UIImage imageNamed:@"bg-BackButton.png"] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(backScreenSearch:) forControlEvents:UIControlEventTouchDown];
-    button.frame = CGRectMake(0, 16, 10, 28);
+    button.frame = CGRectMake(0, 16, 51, 31);
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
     [self.navigationItem setLeftBarButtonItem:barButtonItem];
     RELEASE_OBJECT(barButtonItem);
-    labelTitleImage = [[UILabel alloc] initWithFrame:CGRectMake(48, 7, 250, 30)];
+    labelTitleImage = [[UILabel alloc] initWithFrame:CGRectMake(60, 7, 250, 30)];
     labelTitleImage.font = [UIFont systemFontOfSize:14];
     labelTitleImage.backgroundColor = [UIColor clearColor];
     labelTitleImage.textColor = [UIColor whiteColor];
     [self.navigationController.navigationBar addSubview:labelTitleImage];
     scrollViewAllDetail.contentSize = CGSizeMake(320*mutableArrayDetailPhoto.count, 448);
     scrollViewAllDetail.pagingEnabled = YES;
-    scrollViewAllDetail.scrollEnabled = YES;    
-        for (int i =0; i < mutableArrayDetailPhoto.count; i++) {
+    scrollViewAllDetail.scrollEnabled = YES;
+    NSDictionary *dictionaryDetailItemTitle  = [mutableArrayDetailPhoto objectAtIndex:0];
+    NSString *stringTitlePhoto = [dictionaryDetailItemTitle objectForKey:@"title"];
+    labelTitleImage.text = stringTitlePhoto;
+    NSDictionary *dictionaryDetailItem  = [mutableArrayDetailPhoto objectAtIndex:0];
+    [self loadDetailPhoto:dictionaryDetailItem indexOriginX:0];
+    double delayInSeconds = .5;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+    
+        for (int i = 1; i < mutableArrayDetailPhoto.count; i++) {
             dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             dispatch_async(queue, ^ {
             float indexOriginX = (i*320);
+                NSLog(@"I:%i -- Array:%i",i,mutableArrayDetailPhoto.count);
             NSDictionary *dictionaryDetailItem  = [mutableArrayDetailPhoto objectAtIndex:i];
             [self loadDetailPhoto:dictionaryDetailItem indexOriginX:indexOriginX];
             });
+            dispatch_release(queue);
         }
+    });
     
 }
 -(IBAction)backScreenSearch:(id)sender{
@@ -80,7 +89,7 @@
 }
 -(IBAction)ClickImageDetail:(id)sender {
 
-    labelTitleImage.text = @"Detail Images";
+    //labelTitleImage.text = @"Detail Images";
     NSDictionary *dictionaryPhotoItem = [mutableArrayDetailPhoto objectAtIndex:indexScrollPage];
     NSString *stringUrlPhoto1024 = [dictionaryPhotoItem objectForKey:@"photosize1024"];
     PFImageDetailViewController *imageDetailViewController = [[PFImageDetailViewController alloc] initWithNibName:@"PFImageDetailViewController" aNameImage:stringUrlPhoto1024];
@@ -88,11 +97,6 @@
     
     RELEASE_OBJECT(imageDetailViewController);
 
-}
--(IBAction)ChangerNavigationDetailScreen:(id)sender {
-
-    labelTitleImage.text = @"Images Name";
-    
 }
 -(void)loadDetailPhoto:(NSDictionary *)aDictionaryPhoto indexOriginX:(float)originX {
     //Scroll Screen Item
@@ -144,7 +148,7 @@
     [scrollViewScreenDetailItem addSubview:labelDateUpload];
     
     //label View Count
-    UILabel *labelViewCount = [[UILabel alloc] initWithFrame:CGRectMake(218, 25, 98, 15)];
+    UILabel *labelViewCount = [[UILabel alloc] initWithFrame:CGRectMake(238, 25, 98, 15)];
     labelViewCount.font = [UIFont systemFontOfSize:10];
     labelViewCount.backgroundColor = [UIColor clearColor];
     labelViewCount.textColor = [UIColor darkGrayColor];
@@ -152,18 +156,20 @@
     
     //Text View Description
     NSString *stringDescriptionPhoto = [aDictionaryPhoto objectForKey:@"description"];
-    NSInteger length = [[stringDescriptionPhoto componentsSeparatedByCharactersInSet:
-                         [NSCharacterSet newlineCharacterSet]] count];
+    //NSInteger length = [[stringDescriptionPhoto componentsSeparatedByCharactersInSet:
+                         //[NSCharacterSet newlineCharacterSet]] count];
     
-    int indexLine = length;
+    int indexLine = ceilf(stringDescriptionPhoto.length/46.0);
     UIScrollView *scrollViewDescription = [[UIScrollView alloc] initWithFrame:CGRectMake(17, 333, 283, 60)];
     [scrollViewScreenDetailItem addSubview:scrollViewDescription];
-    scrollViewDescription.contentSize = CGSizeMake(263, 60+(indexLine*13));
+    scrollViewDescription.contentSize = CGSizeMake(263, indexLine*13);
     //Label title comment
-    UILabel *labelTitleDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 283, 128+(indexLine*13))];
+    UILabel *labelTitleDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 283,indexLine*13)];
     labelTitleDescription.font = [UIFont systemFontOfSize:12];
     labelTitleDescription.backgroundColor = [UIColor clearColor];
     labelTitleDescription.textColor = [UIColor darkGrayColor];
+    [labelTitleDescription setTextAlignment:NSTextAlignmentLeft];
+    labelTitleDescription.lineBreakMode = NSLineBreakByWordWrapping;
     [scrollViewDescription addSubview:labelTitleDescription];
     
     //Label title comment
@@ -182,8 +188,6 @@
     NSString *stringDatePhotoUpload = [aDictionaryPhoto objectForKey:@"dateupload"];
     NSString *stringViewCountPhoto = [NSString stringWithFormat:@"Views: %@",[aDictionaryPhoto objectForKey:@"viewCount"]] ;
     NSString *stringUrlPhoto = [aDictionaryPhoto objectForKey:@"photosize240"];
-    NSString *stringTitlePhoto = [aDictionaryPhoto objectForKey:@"title"];
-    
     
     //Data Detail Photo
     [imageViewAvatarUser setImageWithURL:[NSURL URLWithString:stringUrlIconUser]];
@@ -193,11 +197,10 @@
     labelLocationUser.text = stringLocationUser;
     labelDateUpload.text = stringDatePhotoUpload;
     labelViewCount.text = stringViewCountPhoto;
-    labelTitleDescription.text = [NSString stringWithUTF8String:[stringDescriptionPhoto UTF8String]];
+    labelTitleDescription.text = stringDescriptionPhoto;
     //textViewDescription.frame = CGRectMake(15, 335, 290, 50);
     labelTitleComment.frame = CGRectMake(5, 395, 290, 20);
-    //labelTitleImage.text = stringTitlePhoto;
-    mutableArrayComment = [[NSMutableArray alloc] init];
+    NSMutableArray *mutableArrayComment = [[NSMutableArray alloc] init];
     
     //Get data Comment
     NSDictionary *dictionaryCommentPhoto = [self GetInfoCommentsPhoto:stringPhotoId];
@@ -210,13 +213,13 @@
         }
     }
     labelTitleComment.text = [NSString stringWithFormat:@"Comment for this photo: %i comments",[mutableArrayComment count]];
-    UIActivityIndicatorView *activityIndicatorLoadingComment = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    activityIndicatorLoadingComment.frame = CGRectMake(250, 350, 37, 37);
-    activityIndicatorLoadingComment.backgroundColor = [UIColor blackColor];
-    [activityIndicatorLoadingComment stopAnimating];
-    [scrollViewScreenDetailItem addSubview:activityIndicatorLoadingComment];
-    
-    [self loadDataComment:scrollViewComment aActivityComment:activityIndicatorLoadingComment];
+    if (mutableArrayComment.count > 0) {
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        dispatch_async(queue, ^ {
+            [self loadDataComment:scrollViewComment aMutableArray:mutableArrayComment];
+        });
+        dispatch_release(queue);
+    }
     UITapGestureRecognizer *sigleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(ClickImageDetail:)];
     [imageViewDetail addGestureRecognizer:sigleTap];
     
@@ -231,74 +234,62 @@
     RELEASE_OBJECT(labelViewCount);
     RELEASE_OBJECT(labelTitleDescription);
     RELEASE_OBJECT(labelTitleComment);
-    RELEASE_OBJECT(activityIndicatorLoadingComment);
-    
+    RELEASE_OBJECT(mutableArrayComment);
 }
--(void)loadDataComment:(UIScrollView *)aScrollView aActivityComment:(UIActivityIndicatorView *) activityComment {
-    
-    [activityComment startAnimating];
-    double delayInSeconds = .1;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-    
-        [activityComment stopAnimating];
-        float indexFrameYView = 10;
-        aScrollView.frame = CGRectMake(5, 420, 307, 199);
-        if (mutableArrayComment.count > 0) {
-            for (int i = 0; i < mutableArrayComment.count; i++) {
-                NSDictionary *dictionaryItemComment = [mutableArrayComment objectAtIndex:i];
-                
-                NSString *stringUserCommentName = [dictionaryItemComment objectForKey:@"authorname"];
-                NSString *stringUserCommentIconfarm = [dictionaryItemComment objectForKey:@"iconfarm"];
-                NSString *stringUserCommentIconserver = [dictionaryItemComment objectForKey:@"iconserver"];
-                NSString *stringUserCommentId = [dictionaryItemComment objectForKey:@"author"];
-                NSString *stringTextComment = [dictionaryItemComment objectForKey:@"text"];
-                
-                NSString *stringUrlIConUserComment = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/buddyicons/%@.jpg",stringUserCommentIconfarm,stringUserCommentIconserver,stringUserCommentId];
-                
-                NSInteger length = [[stringTextComment componentsSeparatedByCharactersInSet:
-                                     [NSCharacterSet newlineCharacterSet]] count];
-                
-                int indexLine = length;
-                //ceilf(stringTextComment.length/46.0);
-                float indexFrameYComment = indexLine*13;
-                UIView *viewItemComment = [[UIView alloc] initWithFrame:CGRectMake(0, indexFrameYView, 320, 40*indexFrameYComment)];
-                [aScrollView addSubview:viewItemComment];
-                UIImageView *imageViewAvatarComment = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-                [imageViewAvatarComment setImageWithURL:[NSURL URLWithString:stringUrlIConUserComment]];
-                [viewItemComment addSubview:imageViewAvatarComment];
-                UILabel *labelNameUserComment = [[UILabel alloc] initWithFrame:CGRectMake(35, 0, 250, 13)];
-                labelNameUserComment.font = [UIFont systemFontOfSize:13];
-                labelNameUserComment.textColor = [UIColor cyanColor];
-                labelNameUserComment.backgroundColor = [UIColor clearColor];
-                labelNameUserComment.text = stringUserCommentName;
-                [viewItemComment addSubview:labelNameUserComment];
-                
-                
-                UILabel *labelBodyComment = [[UILabel alloc] initWithFrame:CGRectMake(35, 20, 270, indexFrameYComment)];
-                labelBodyComment.font = [UIFont systemFontOfSize:11];
-                [labelBodyComment setTextAlignment:NSTextAlignmentLeft];
-                labelBodyComment.lineBreakMode = NSLineBreakByWordWrapping;
-                labelBodyComment.numberOfLines = 0;
-                labelBodyComment.textColor = [UIColor darkGrayColor];
-                labelBodyComment.backgroundColor = [UIColor clearColor];
-                labelBodyComment.text = stringTextComment;
-                [viewItemComment addSubview:labelBodyComment];
-                
-                indexFrameYView = indexFrameYView + (40+indexFrameYComment);
-                
-                
-                RELEASE_OBJECT(viewItemComment);
-                RELEASE_OBJECT(imageViewAvatarComment);
-                RELEASE_OBJECT(labelNameUserComment);
-                RELEASE_OBJECT(labelBodyComment);
-            }
-        }
+-(void)loadDataComment:(UIScrollView *)aScrollView  aMutableArray:(NSMutableArray *) mutableArrayComment{
+    float indexFrameYView = 10;
+    aScrollView.frame = CGRectMake(5, 420, 307, 199);
+    for (int i = 0; i < mutableArrayComment.count; i++) {
+        NSDictionary *dictionaryItemComment = [mutableArrayComment objectAtIndex:i];
         
-        aScrollView.layer.borderWidth = 1.0;
-        aScrollView.layer.borderColor = [[UIColor grayColor] CGColor];
-        aScrollView.contentSize = CGSizeMake(307, indexFrameYView+100);
-   });
+        NSString *stringUserCommentName = [dictionaryItemComment objectForKey:@"authorname"];
+        NSString *stringUserCommentIconfarm = [dictionaryItemComment objectForKey:@"iconfarm"];
+        NSString *stringUserCommentIconserver = [dictionaryItemComment objectForKey:@"iconserver"];
+        NSString *stringUserCommentId = [dictionaryItemComment objectForKey:@"author"];
+        NSString *stringTextComment = [dictionaryItemComment objectForKey:@"text"];
+        
+        NSString *stringUrlIConUserComment = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/buddyicons/%@.jpg",stringUserCommentIconfarm,stringUserCommentIconserver,stringUserCommentId];
+        
+        NSInteger length = [[stringTextComment componentsSeparatedByCharactersInSet:
+                             [NSCharacterSet newlineCharacterSet]] count];
+        
+        int indexLine = length;
+        //ceilf(stringTextComment.length/46.0);
+        float indexFrameYComment = indexLine*13;
+        UIView *viewItemComment = [[UIView alloc] initWithFrame:CGRectMake(0, indexFrameYView, 320, 40*indexFrameYComment)];
+        [aScrollView addSubview:viewItemComment];
+        UIImageView *imageViewAvatarComment = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+        [imageViewAvatarComment setImageWithURL:[NSURL URLWithString:stringUrlIConUserComment]];
+        [viewItemComment addSubview:imageViewAvatarComment];
+        UILabel *labelNameUserComment = [[UILabel alloc] initWithFrame:CGRectMake(35, 0, 250, 13)];
+        labelNameUserComment.font = [UIFont systemFontOfSize:13];
+        labelNameUserComment.textColor = [UIColor blueColor];
+        labelNameUserComment.backgroundColor = [UIColor clearColor];
+        labelNameUserComment.text = stringUserCommentName;
+        [viewItemComment addSubview:labelNameUserComment];
+        
+        
+        UILabel *labelBodyComment = [[UILabel alloc] initWithFrame:CGRectMake(35, 20, 270, indexFrameYComment)];
+        labelBodyComment.font = [UIFont systemFontOfSize:11];
+        [labelBodyComment setTextAlignment:NSTextAlignmentLeft];
+        labelBodyComment.lineBreakMode = NSLineBreakByWordWrapping;
+        labelBodyComment.numberOfLines = 0;
+        labelBodyComment.textColor = [UIColor darkGrayColor];
+        labelBodyComment.backgroundColor = [UIColor clearColor];
+        labelBodyComment.text = stringTextComment;
+        [viewItemComment addSubview:labelBodyComment];
+        
+        indexFrameYView = indexFrameYView + (40+indexFrameYComment);
+        
+        
+        RELEASE_OBJECT(viewItemComment);
+        RELEASE_OBJECT(imageViewAvatarComment);
+        RELEASE_OBJECT(labelNameUserComment);
+        RELEASE_OBJECT(labelBodyComment);
+    }
+    aScrollView.layer.borderWidth = 1.0;
+    aScrollView.layer.borderColor = [[UIColor grayColor] CGColor];
+    aScrollView.contentSize = CGSizeMake(307, indexFrameYView+100);
     
 }
 -(NSDictionary *)GetInfoCommentsPhoto:(NSString *)aPhotoId {
@@ -324,7 +315,15 @@
     return xmlDictionary;
     
 }
-
+- (void)scrollViewDidScroll:(UIScrollView *)sender {
+    if (sender == scrollViewAllDetail) {
+        int pageNum = (int)(scrollViewAllDetail.contentOffset.x / scrollViewAllDetail.frame.size.width);
+        indexScrollPage = pageNum;
+        NSDictionary *dictionaryDetailItemTitle  = [mutableArrayDetailPhoto objectAtIndex:pageNum];
+        NSString *stringTitlePhoto = [dictionaryDetailItemTitle objectForKey:@"title"];
+        labelTitleImage.text = stringTitlePhoto;
+    }
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

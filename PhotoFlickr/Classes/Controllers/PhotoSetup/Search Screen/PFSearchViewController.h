@@ -14,6 +14,7 @@
 
     IBOutlet UISearchBar *searchBarPhoto;
     IBOutlet UILabel *labelNumberResuil;
+    UILabel *labelTitleApp;
     UIImageView *imageViewSearchLogo;
     UIImageView *imageViewSearchIcon;
     IBOutlet UITableView *tableViewResuil;

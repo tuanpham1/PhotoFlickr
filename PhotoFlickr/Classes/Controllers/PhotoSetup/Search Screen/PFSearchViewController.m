@@ -41,16 +41,22 @@
 {
     [super viewDidLoad];
     [self CheckConnectInternet];
-    //self.navigationController.navigationBar.tintColor = [UIColor blackColor];
-    //labelNumberResuil.backgroundColor = [UIColor grayColor];
     searchBarPhoto.delegate = self;
     [self searchBarSetUp];
     
-    //imageViewSearchLogo = [[UIImageView alloc] initWithFrame:CGRectMake(15, 8, 30, 30)];
-    //imageViewSearchLogo.image = [UIImage imageNamed:@"logo-search.jpg"];
-    //[self.navigationController.navigationBar addSubview:imageViewSearchLogo];
+//    float widthScreen = [UIScreen mainScreen].bounds.size.width;
+//    float heightScreen = [UIScreen mainScreen].bounds.size.height;
+//    tableViewResuil.frame = CGRectMake(0, 0, widthScreen, 548);
+//    NSLog(@"widthScreen:%f -- heightScreen:%f",widthScreen,heightScreen);
     
-    imageViewSearchIcon = [[UIImageView alloc] initWithFrame:CGRectMake(280, 10, 25, 25)];
+    labelTitleApp = [[UILabel alloc] initWithFrame:CGRectMake(55, 15, 200, 20)];
+    labelTitleApp.backgroundColor = [UIColor clearColor];
+    labelTitleApp.font = [UIFont systemFontOfSize:15];
+    labelTitleApp.text = @"Search For Photos In Flickr";
+    labelTitleApp.textColor = [UIColor whiteColor];
+    [self.navigationController.navigationBar addSubview:labelTitleApp];
+    
+    imageViewSearchIcon = [[UIImageView alloc] initWithFrame:CGRectMake(20, 10, 25, 25)];
     imageViewSearchIcon.image = [UIImage imageNamed:@"icon-search.png"];
     [self.navigationController.navigationBar addSubview:imageViewSearchIcon];
     mutableArrayResuilData = [[NSMutableArray alloc] init];
@@ -100,6 +106,7 @@
 
 -(IBAction)changerSetUpNavigationBar:(id)sender {
 
+    labelTitleApp.hidden = NO;
     searchBarPhoto.text = @"Keyword";
     searchBarPhoto.hidden = NO;
     imageViewSearchIcon.hidden = NO;
@@ -158,14 +165,10 @@
 #pragma mark Seach Function
 -(void)searchBarSetUp {
     
-    
     searchBarPhoto.autocorrectionType = UITextAutocorrectionTypeNo;
-    searchBarPhoto.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_searchBar.png"]];
-    labelNumberResuil.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_searchBar.png"]];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_searchBar.png"]];
-    
-    
-    //[UIImage imageNamed:@"bg_searchBar.png"];
+    searchBarPhoto.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-searchBar.png"]];
+    labelNumberResuil.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-searchBar.png"]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-searchBar.png"]];
     
     searchBarPhoto.delegate = self;
     searchBarPhoto.text = @"Keyword";
@@ -181,7 +184,9 @@
             [subview removeFromSuperview];
         }
         if ([subview isKindOfClass:NSClassFromString(@"UISearchBarTextField")]) {
-            // [(UITextField *)subview setBackground:[UIImage imageNamed:@"txt_search.png"]];
+            [(UITextField *)subview setBackground:[UIImage imageNamed:@"bg-InputSearchBar.png"]];
+            [(UITextField *)subview setTextColor:[UIColor darkGrayColor]];
+            [(UITextField *)subview setFont:[UIFont systemFontOfSize:13]];
         }
     }
     
@@ -420,6 +425,7 @@
                 [self GetDataPhotoForCell:indexCellLoader];
                 [tableViewResuil reloadData];
             });
+            dispatch_release(queue);
         }
     }
     
@@ -430,6 +436,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([mutableArraySaveDataCell count] > 0) {
+        labelTitleApp.hidden = YES;
         searchBarPhoto.hidden = YES;
         imageViewSearchIcon.hidden = YES;
         [searchBarPhoto resignFirstResponder];

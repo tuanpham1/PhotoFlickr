@@ -40,9 +40,9 @@
     [self.imageView setUserInteractionEnabled:YES];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [button setBackgroundImage:[UIImage imageNamed:@"icon-back.jpeg"] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UIImage imageNamed:@"bg-BackButton.png"] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(backScreenBegin:) forControlEvents:UIControlEventTouchDown];
-    button.frame = CGRectMake(0, 16, 10, 28);
+    button.frame = CGRectMake(0, 16, 51, 30);
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
     [self.navigationItem setLeftBarButtonItem:barButtonItem];
     
@@ -78,7 +78,6 @@
     UIButton *buttonBack = (UIButton *)sender;
     buttonBack.frame = CGRectMake(0, 0, 0, 0);
     [self.navigationController popViewControllerAnimated:YES];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangerNavigationBarDetailScreen" object:nil];
 }
 #pragma mark Zoom Images Function
 - (void)didReceiveMemoryWarning
