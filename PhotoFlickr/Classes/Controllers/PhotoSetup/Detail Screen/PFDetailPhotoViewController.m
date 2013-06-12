@@ -42,6 +42,7 @@
     [super viewDidLoad];
     
     indexScrollPage = 0;
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_searchBar.png"]];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (ChangerNavigationDetailScreen:) name:@"ChangerNavigationBarDetailScreen" object:nil];
     
     //get info user(username, location, url Image)
@@ -118,35 +119,35 @@
     UILabel *labelNameUser = [[UILabel alloc] initWithFrame:CGRectMake(60, 8, 149, 15)];
     labelNameUser.font = [UIFont systemFontOfSize:12];
     labelNameUser.backgroundColor = [UIColor clearColor];
-    labelNameUser.textColor = [UIColor whiteColor];
+    labelNameUser.textColor = [UIColor blackColor];
     [scrollViewScreenDetailItem addSubview:labelNameUser];
     
     //Label user Name True
     UILabel *labelNameUserTrue = [[UILabel alloc] initWithFrame:CGRectMake(63, 25, 149, 15)];
-    labelNameUserTrue.font = [UIFont systemFontOfSize:12];
+    labelNameUserTrue.font = [UIFont systemFontOfSize:10];
     labelNameUserTrue.backgroundColor = [UIColor clearColor];
-    labelNameUserTrue.textColor = [UIColor whiteColor];
+    labelNameUserTrue.textColor = [UIColor darkGrayColor];
     [scrollViewScreenDetailItem addSubview:labelNameUserTrue];
     
     //Label Location User
     UILabel *labelLocationUser = [[UILabel alloc] initWithFrame:CGRectMake(63, 43, 149, 15)];
-    labelLocationUser.font = [UIFont systemFontOfSize:12];
+    labelLocationUser.font = [UIFont systemFontOfSize:10];
     labelLocationUser.backgroundColor = [UIColor clearColor];
-    labelLocationUser.textColor = [UIColor whiteColor];
+    labelLocationUser.textColor = [UIColor darkGrayColor];
     [scrollViewScreenDetailItem addSubview:labelLocationUser];
     
     //label Date Upload
     UILabel *labelDateUpload = [[UILabel alloc] initWithFrame:CGRectMake(218, 8, 98, 15)];
     labelDateUpload.font = [UIFont systemFontOfSize:10];
     labelDateUpload.backgroundColor = [UIColor clearColor];
-    labelDateUpload.textColor = [UIColor whiteColor];
+    labelDateUpload.textColor = [UIColor darkGrayColor];
     [scrollViewScreenDetailItem addSubview:labelDateUpload];
     
     //label View Count
     UILabel *labelViewCount = [[UILabel alloc] initWithFrame:CGRectMake(218, 25, 98, 15)];
     labelViewCount.font = [UIFont systemFontOfSize:10];
     labelViewCount.backgroundColor = [UIColor clearColor];
-    labelViewCount.textColor = [UIColor whiteColor];
+    labelViewCount.textColor = [UIColor darkGrayColor];
     [scrollViewScreenDetailItem addSubview:labelViewCount];
     
     //Text View Description
@@ -157,19 +158,19 @@
     int indexLine = length;
     UIScrollView *scrollViewDescription = [[UIScrollView alloc] initWithFrame:CGRectMake(17, 333, 283, 60)];
     [scrollViewScreenDetailItem addSubview:scrollViewDescription];
-    scrollViewDescription.contentSize = CGSizeMake(263, 128+(indexLine*13));
+    scrollViewDescription.contentSize = CGSizeMake(263, 60+(indexLine*13));
     //Label title comment
     UILabel *labelTitleDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 283, 128+(indexLine*13))];
     labelTitleDescription.font = [UIFont systemFontOfSize:12];
     labelTitleDescription.backgroundColor = [UIColor clearColor];
-    labelTitleDescription.textColor = [UIColor whiteColor];
+    labelTitleDescription.textColor = [UIColor darkGrayColor];
     [scrollViewDescription addSubview:labelTitleDescription];
     
     //Label title comment
     UILabel *labelTitleComment = [[UILabel alloc] initWithFrame:CGRectMake(14, 359, 292, 21)];
     labelTitleComment.font = [UIFont systemFontOfSize:12];
     labelTitleComment.backgroundColor = [UIColor clearColor];
-    labelTitleComment.textColor = [UIColor whiteColor];
+    labelTitleComment.textColor = [UIColor darkGrayColor];
     [scrollViewScreenDetailItem addSubview:labelTitleComment];
     
     
@@ -195,7 +196,7 @@
     labelTitleDescription.text = [NSString stringWithUTF8String:[stringDescriptionPhoto UTF8String]];
     //textViewDescription.frame = CGRectMake(15, 335, 290, 50);
     labelTitleComment.frame = CGRectMake(5, 395, 290, 20);
-    labelTitleImage.text = stringTitlePhoto;
+    //labelTitleImage.text = stringTitlePhoto;
     mutableArrayComment = [[NSMutableArray alloc] init];
     
     //Get data Comment
@@ -269,7 +270,7 @@
                 UILabel *labelNameUserComment = [[UILabel alloc] initWithFrame:CGRectMake(35, 0, 250, 13)];
                 labelNameUserComment.font = [UIFont systemFontOfSize:13];
                 labelNameUserComment.textColor = [UIColor cyanColor];
-                labelNameUserComment.backgroundColor = [UIColor blackColor];
+                labelNameUserComment.backgroundColor = [UIColor clearColor];
                 labelNameUserComment.text = stringUserCommentName;
                 [viewItemComment addSubview:labelNameUserComment];
                 
@@ -279,8 +280,8 @@
                 [labelBodyComment setTextAlignment:NSTextAlignmentLeft];
                 labelBodyComment.lineBreakMode = NSLineBreakByWordWrapping;
                 labelBodyComment.numberOfLines = 0;
-                labelBodyComment.textColor = [UIColor whiteColor];
-                labelBodyComment.backgroundColor = [UIColor blackColor];
+                labelBodyComment.textColor = [UIColor darkGrayColor];
+                labelBodyComment.backgroundColor = [UIColor clearColor];
                 labelBodyComment.text = stringTextComment;
                 [viewItemComment addSubview:labelBodyComment];
                 

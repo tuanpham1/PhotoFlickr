@@ -46,9 +46,9 @@
     searchBarPhoto.delegate = self;
     [self searchBarSetUp];
     
-    imageViewSearchLogo = [[UIImageView alloc] initWithFrame:CGRectMake(15, 8, 30, 30)];
-    imageViewSearchLogo.image = [UIImage imageNamed:@"logo-search.jpg"];
-    [self.navigationController.navigationBar addSubview:imageViewSearchLogo];
+    //imageViewSearchLogo = [[UIImageView alloc] initWithFrame:CGRectMake(15, 8, 30, 30)];
+    //imageViewSearchLogo.image = [UIImage imageNamed:@"logo-search.jpg"];
+    //[self.navigationController.navigationBar addSubview:imageViewSearchLogo];
     
     imageViewSearchIcon = [[UIImageView alloc] initWithFrame:CGRectMake(280, 10, 25, 25)];
     imageViewSearchIcon.image = [UIImage imageNamed:@"icon-search.png"];
@@ -60,7 +60,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (changerSetUpNavigationBar:) name:@"ChangerNavigationBar" object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (ReloadTableViewData:) name:@"ReloadTableData" object:nil];
     
     imageViewBackGroudLoad = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 548)];
     [imageViewBackGroudLoad setUserInteractionEnabled:NO];
@@ -161,7 +160,13 @@
     
     
     searchBarPhoto.autocorrectionType = UITextAutocorrectionTypeNo;
-    //searchBarPhoto.backgroundColor = ;
+    searchBarPhoto.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_searchBar.png"]];
+    labelNumberResuil.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_searchBar.png"]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_searchBar.png"]];
+    
+    
+    //[UIImage imageNamed:@"bg_searchBar.png"];
+    
     searchBarPhoto.delegate = self;
     searchBarPhoto.text = @"Keyword";
     UITextField *textfield=(UITextField*)[[searchBarPhoto subviews] objectAtIndex:1];
