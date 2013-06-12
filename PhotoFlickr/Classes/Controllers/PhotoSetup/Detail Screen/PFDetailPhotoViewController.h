@@ -15,7 +15,7 @@
     NSMutableArray *mutableArrayComment;
     NSMutableArray *mutableArrayDetailPhoto;
     int indexScrollPage;
-    UIActivityIndicatorView *activityIndicatorviewLoadingSearch;
+    int indexPageLoader;
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil aDictionaryItem:(NSDictionary *)dictionaryItem indexPath:(int)indexPath;
 -(NSDictionary *)GetInfoCommentsPhoto:(NSString *)aPhotoId;

@@ -19,7 +19,9 @@
     // Override point for customization after application launch.
     PFSearchViewController *searchviewController = [[[PFSearchViewController alloc] initWithNibName:@"PFSearchViewController" bundle:nil] autorelease];
     self.navigationController  = [[[UINavigationController alloc] initWithRootViewController:searchviewController] autorelease];
-    self.window.rootViewController = self.navigationController;
+    [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+    [self.window makeKeyAndVisible];
+    [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
     return YES;
 }

@@ -30,7 +30,6 @@
     return self;
 }
 -(void)dealloc {
-    RELEASE_OBJECT(activityIndicatorviewLoadingSearch);
     RELEASE_OBJECT(labelTitleImage);
     RELEASE_OBJECT(mutableArrayDetailPhoto);
     RELEASE_OBJECT(scrollViewAllDetail);
@@ -60,31 +59,16 @@
     [self.navigationController.navigationBar addSubview:labelTitleImage];
     scrollViewAllDetail.contentSize = CGSizeMake(320*mutableArrayDetailPhoto.count, 448);
     scrollViewAllDetail.pagingEnabled = YES;
-    scrollViewAllDetail.scrollEnabled = YES;
-    
-    activityIndicatorviewLoadingSearch = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    activityIndicatorviewLoadingSearch.frame = CGRectMake(150, 150, 37, 37);
-    activityIndicatorviewLoadingSearch.backgroundColor = [UIColor blackColor];
-    [self.view addSubview:activityIndicatorviewLoadingSearch];
-    [activityIndicatorviewLoadingSearch startAnimating];
-    
-    double delayInSeconds1 = .1;
-    dispatch_time_t popTime1 = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds1 * NSEC_PER_SEC));
-    dispatch_after(popTime1, dispatch_get_main_queue(), ^(void){
-        [activityIndicatorviewLoadingSearch stopAnimating];
-        NSDictionary *dictionaryDetailItem0  = [mutableArrayDetailPhoto objectAtIndex:0];
-        [self loadDetailPhoto:dictionaryDetailItem0 indexOriginX:0];
-    });
-    double delayInSeconds = .2;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        for (int i =1; i < mutableArrayDetailPhoto.count; i++) {
+    scrollViewAllDetail.scrollEnabled = YES;    
+        for (int i =0; i < mutableArrayDetailPhoto.count; i++) {
+            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+            dispatch_async(queue, ^ {
             float indexOriginX = (i*320);
             NSDictionary *dictionaryDetailItem  = [mutableArrayDetailPhoto objectAtIndex:i];
             [self loadDetailPhoto:dictionaryDetailItem indexOriginX:indexOriginX];
-            
+            });
         }
-    });
+    
 }
 -(IBAction)backScreenSearch:(id)sender{
     labelTitleImage.hidden = YES;
@@ -166,11 +150,20 @@
     [scrollViewScreenDetailItem addSubview:labelViewCount];
     
     //Text View Description
-    UITextView *textViewDescription = [[UITextView alloc] initWithFrame:CGRectMake(17, 263, 283, 128)];
-    textViewDescription.font = [UIFont systemFontOfSize:13];
-    textViewDescription.backgroundColor = [UIColor clearColor];
-    textViewDescription.textColor = [UIColor whiteColor];
-    [scrollViewScreenDetailItem addSubview:textViewDescription];
+    NSString *stringDescriptionPhoto = [aDictionaryPhoto objectForKey:@"description"];
+    NSInteger length = [[stringDescriptionPhoto componentsSeparatedByCharactersInSet:
+                         [NSCharacterSet newlineCharacterSet]] count];
+    
+    int indexLine = length;
+    UIScrollView *scrollViewDescription = [[UIScrollView alloc] initWithFrame:CGRectMake(17, 333, 283, 60)];
+    [scrollViewScreenDetailItem addSubview:scrollViewDescription];
+    scrollViewDescription.contentSize = CGSizeMake(263, 128+(indexLine*13));
+    //Label title comment
+    UILabel *labelTitleDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 283, 128+(indexLine*13))];
+    labelTitleDescription.font = [UIFont systemFontOfSize:12];
+    labelTitleDescription.backgroundColor = [UIColor clearColor];
+    labelTitleDescription.textColor = [UIColor whiteColor];
+    [scrollViewDescription addSubview:labelTitleDescription];
     
     //Label title comment
     UILabel *labelTitleComment = [[UILabel alloc] initWithFrame:CGRectMake(14, 359, 292, 21)];
@@ -189,7 +182,7 @@
     NSString *stringViewCountPhoto = [NSString stringWithFormat:@"Views: %@",[aDictionaryPhoto objectForKey:@"viewCount"]] ;
     NSString *stringUrlPhoto = [aDictionaryPhoto objectForKey:@"photosize240"];
     NSString *stringTitlePhoto = [aDictionaryPhoto objectForKey:@"title"];
-    NSString *stringDescriptionPhoto = [aDictionaryPhoto objectForKey:@"description"];
+    
     
     //Data Detail Photo
     [imageViewAvatarUser setImageWithURL:[NSURL URLWithString:stringUrlIconUser]];
@@ -199,8 +192,8 @@
     labelLocationUser.text = stringLocationUser;
     labelDateUpload.text = stringDatePhotoUpload;
     labelViewCount.text = stringViewCountPhoto;
-    textViewDescription.text = [NSString stringWithUTF8String:[stringDescriptionPhoto UTF8String]];
-    textViewDescription.frame = CGRectMake(15, 335, 290, 50);
+    labelTitleDescription.text = [NSString stringWithUTF8String:[stringDescriptionPhoto UTF8String]];
+    //textViewDescription.frame = CGRectMake(15, 335, 290, 50);
     labelTitleComment.frame = CGRectMake(5, 395, 290, 20);
     labelTitleImage.text = stringTitlePhoto;
     mutableArrayComment = [[NSMutableArray alloc] init];
@@ -235,7 +228,7 @@
     RELEASE_OBJECT(labelLocationUser);
     RELEASE_OBJECT(labelDateUpload);
     RELEASE_OBJECT(labelViewCount);
-    RELEASE_OBJECT(textViewDescription);
+    RELEASE_OBJECT(labelTitleDescription);
     RELEASE_OBJECT(labelTitleComment);
     RELEASE_OBJECT(activityIndicatorLoadingComment);
     
@@ -330,12 +323,7 @@
     return xmlDictionary;
     
 }
-- (void)scrollViewDidScroll:(UIScrollView *)sender {
-    if (sender == scrollViewAllDetail) {
-        int pageNum = (int)(scrollViewAllDetail.contentOffset.x / scrollViewAllDetail.frame.size.width);
-        indexScrollPage = pageNum;
-    }
-}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

@@ -41,7 +41,8 @@
 {
     [super viewDidLoad];
     [self CheckConnectInternet];
-    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+    //self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+    //labelNumberResuil.backgroundColor = [UIColor grayColor];
     searchBarPhoto.delegate = self;
     [self searchBarSetUp];
     
@@ -58,6 +59,8 @@
     tableViewResuil.hidden = YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (changerSetUpNavigationBar:) name:@"ChangerNavigationBar" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (ReloadTableViewData:) name:@"ReloadTableData" object:nil];
     
     imageViewBackGroudLoad = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 548)];
     [imageViewBackGroudLoad setUserInteractionEnabled:NO];
@@ -220,7 +223,6 @@
             NSDictionary *dictionaryPhotos = [dictionaryrsp objectForKey:@"photos"];
             NSDictionary *dictionaryPhoto = [dictionaryPhotos objectForKey:@"photo"];
             int i = 0;
-            
             for (NSDictionary *dictionaryPhotoItem in dictionaryPhoto) {
                 i++;
                 [mutableArraySaveResuilData addObject:dictionaryPhotoItem];
@@ -243,15 +245,6 @@
         }
         
     });
-    
-    
-    
-    
-    
-    
-    
-    //[spinning stopAnimating];
-    //RELEASE_OBJECT(spinning);
 }
 // Khi nut cancel duoc click
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
@@ -263,98 +256,100 @@
     if(mutableArraySaveDataCell.count < indexRow)
     {
         for (int i = mutableArraySaveDataCell.count; i < indexRow ; i++) {
-            NSDictionary *dictionaryPhotoItem = [mutableArraySaveResuilData objectAtIndex:i];
-            NSString *stringPhotoID = [dictionaryPhotoItem objectForKey:@"id"];
-            NSString *stringSecret = [dictionaryPhotoItem objectForKey:@"secret"];
-            NSDictionary *dictionaryPhotoInfo = [self GetInfoPhotoItem:stringPhotoID andSecretPhoto:stringSecret];
-            
-            NSDictionary *dictionaryPhotoInfoRsp = [dictionaryPhotoInfo objectForKey:@"rsp"];
-            NSDictionary *dictionaryPhotoInfoPhoto = [dictionaryPhotoInfoRsp objectForKey:@"photo"];
-            NSDictionary *dictionaryPhotoInfoOwner = [dictionaryPhotoInfoPhoto objectForKey:@"owner"];
-            NSDictionary *dictionaryPhotoInfoDates = [dictionaryPhotoInfoPhoto objectForKey:@"dates"];
-            NSDictionary *dictionaryPhotoInfoTitle = [dictionaryPhotoInfoPhoto objectForKey:@"title"];
-            NSDictionary *dictionaryPhotoInfoDescription = [dictionaryPhotoInfoPhoto objectForKey:@"description"];
-            NSString *stringViewCountPhoto =         [dictionaryPhotoInfoPhoto objectForKey:@"views"];
-            
-            //get info user(username, location, url Image)
-            NSString *stringNameUser = [dictionaryPhotoInfoOwner objectForKey:@"username"];
-            NSString *stringRealNameUser = [dictionaryPhotoInfoOwner objectForKey:@"realname"];
-            NSString *stringLocationUser = [dictionaryPhotoInfoOwner objectForKey:@"location"];
-            NSString *stringIconFarmUser = [dictionaryPhotoInfoOwner objectForKey:@"iconfarm"];
-            NSString *stringIconServerUser = [dictionaryPhotoInfoOwner objectForKey:@"iconserver"];
-            NSString *stringIdUser = [dictionaryPhotoInfoOwner objectForKey:@"nsid"];
-            NSString *stringUrlIConUser = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/buddyicons/%@.jpg",stringIconFarmUser,stringIconServerUser,stringIdUser];
-            
-            //Get date photo upload
-            NSString *stringDatePhotoUpload = [dictionaryPhotoInfoDates objectForKey:@"taken"];
-            stringDatePhotoUpload = [self convertDateStringMySetup:stringDatePhotoUpload];
-        
-            
-            //get title photo
-            NSString *stringTitlePhoto = [dictionaryPhotoInfoTitle objectForKey:@"text"];
-            NSString *stringDescriptionPhoto = [dictionaryPhotoInfoDescription objectForKey:@"text"];
-            
-            //url photo loader
-            NSDictionary *dictionaryPhotoInfoFarm = [dictionaryPhotoInfoPhoto objectForKey:@"farm"];
-            NSDictionary *dictionaryPhotoInfoServerId = [dictionaryPhotoInfoPhoto objectForKey:@"server"];
-            NSDictionary *dictionaryPhotoInfoId = [dictionaryPhotoInfoPhoto objectForKey:@"id"];
-            NSDictionary *dictionaryPhotoInfoSecret = [dictionaryPhotoInfoPhoto objectForKey:@"secret"];
-            NSString *stringUrlPhotoSize150 = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@_q.jpg",dictionaryPhotoInfoFarm,dictionaryPhotoInfoServerId,dictionaryPhotoInfoId,dictionaryPhotoInfoSecret];
-            NSString *stringUrlPhotoSize240 = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@_m.jpg",dictionaryPhotoInfoFarm,dictionaryPhotoInfoServerId,dictionaryPhotoInfoId,dictionaryPhotoInfoSecret];
-            NSString *stringUrlPhotoSize1024 = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@_b.jpg",dictionaryPhotoInfoFarm,dictionaryPhotoInfoServerId,dictionaryPhotoInfoId,dictionaryPhotoInfoSecret];
-            
-            NSMutableDictionary *mutableDictionaryPhotoItem = [[NSMutableDictionary alloc] init];
-            
-            if (stringTitlePhoto == NULL) {
-                stringTitlePhoto = @"no photo";
+            if (i < mutableArraySaveResuilData.count) {
+                NSDictionary *dictionaryPhotoItem = [mutableArraySaveResuilData objectAtIndex:i];
+                NSString *stringPhotoID = [dictionaryPhotoItem objectForKey:@"id"];
+                NSString *stringSecret = [dictionaryPhotoItem objectForKey:@"secret"];
+                NSDictionary *dictionaryPhotoInfo = [self GetInfoPhotoItem:stringPhotoID andSecretPhoto:stringSecret];
+                
+                NSDictionary *dictionaryPhotoInfoRsp = [dictionaryPhotoInfo objectForKey:@"rsp"];
+                NSDictionary *dictionaryPhotoInfoPhoto = [dictionaryPhotoInfoRsp objectForKey:@"photo"];
+                NSDictionary *dictionaryPhotoInfoOwner = [dictionaryPhotoInfoPhoto objectForKey:@"owner"];
+                NSDictionary *dictionaryPhotoInfoDates = [dictionaryPhotoInfoPhoto objectForKey:@"dates"];
+                NSDictionary *dictionaryPhotoInfoTitle = [dictionaryPhotoInfoPhoto objectForKey:@"title"];
+                NSDictionary *dictionaryPhotoInfoDescription = [dictionaryPhotoInfoPhoto objectForKey:@"description"];
+                NSString *stringViewCountPhoto =         [dictionaryPhotoInfoPhoto objectForKey:@"views"];
+                
+                //get info user(username, location, url Image)
+                NSString *stringNameUser = [dictionaryPhotoInfoOwner objectForKey:@"username"];
+                NSString *stringRealNameUser = [dictionaryPhotoInfoOwner objectForKey:@"realname"];
+                NSString *stringLocationUser = [dictionaryPhotoInfoOwner objectForKey:@"location"];
+                NSString *stringIconFarmUser = [dictionaryPhotoInfoOwner objectForKey:@"iconfarm"];
+                NSString *stringIconServerUser = [dictionaryPhotoInfoOwner objectForKey:@"iconserver"];
+                NSString *stringIdUser = [dictionaryPhotoInfoOwner objectForKey:@"nsid"];
+                NSString *stringUrlIConUser = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/buddyicons/%@.jpg",stringIconFarmUser,stringIconServerUser,stringIdUser];
+                
+                //Get date photo upload
+                NSString *stringDatePhotoUpload = [dictionaryPhotoInfoDates objectForKey:@"taken"];
+                stringDatePhotoUpload = [self convertDateStringMySetup:stringDatePhotoUpload];
+                
+                
+                //get title photo
+                NSString *stringTitlePhoto = [dictionaryPhotoInfoTitle objectForKey:@"text"];
+                NSString *stringDescriptionPhoto = [dictionaryPhotoInfoDescription objectForKey:@"text"];
+                
+                //url photo loader
+                NSDictionary *dictionaryPhotoInfoFarm = [dictionaryPhotoInfoPhoto objectForKey:@"farm"];
+                NSDictionary *dictionaryPhotoInfoServerId = [dictionaryPhotoInfoPhoto objectForKey:@"server"];
+                NSDictionary *dictionaryPhotoInfoId = [dictionaryPhotoInfoPhoto objectForKey:@"id"];
+                NSDictionary *dictionaryPhotoInfoSecret = [dictionaryPhotoInfoPhoto objectForKey:@"secret"];
+                NSString *stringUrlPhotoSize150 = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@_q.jpg",dictionaryPhotoInfoFarm,dictionaryPhotoInfoServerId,dictionaryPhotoInfoId,dictionaryPhotoInfoSecret];
+                NSString *stringUrlPhotoSize240 = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@_m.jpg",dictionaryPhotoInfoFarm,dictionaryPhotoInfoServerId,dictionaryPhotoInfoId,dictionaryPhotoInfoSecret];
+                NSString *stringUrlPhotoSize1024 = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@_b.jpg",dictionaryPhotoInfoFarm,dictionaryPhotoInfoServerId,dictionaryPhotoInfoId,dictionaryPhotoInfoSecret];
+                
+                NSMutableDictionary *mutableDictionaryPhotoItem = [[NSMutableDictionary alloc] init];
+                
+                if (stringTitlePhoto == NULL) {
+                    stringTitlePhoto = @"no photo";
+                }
+                if (stringNameUser == NULL) {
+                    stringNameUser = @"no name";
+                }
+                if (stringRealNameUser == NULL) {
+                    stringRealNameUser = @"no real name";
+                }
+                if (stringLocationUser == NULL) {
+                    stringLocationUser = @"no location";
+                }
+                if (stringUrlIConUser == NULL) {
+                    stringUrlIConUser = @"no url icon";
+                }
+                if (stringDatePhotoUpload == NULL) {
+                    stringDatePhotoUpload = @"no date photo";
+                }
+                if (stringDescriptionPhoto == NULL) {
+                    stringDescriptionPhoto = @"no descreption";
+                }
+                if (stringUrlPhotoSize150 == NULL) {
+                    stringUrlPhotoSize150 = @"no photo size 150";
+                }
+                if (stringUrlPhotoSize240 == NULL) {
+                    stringUrlPhotoSize240 = @"no photo size 240";
+                }
+                if (stringUrlPhotoSize1024 == NULL) {
+                    stringUrlPhotoSize1024 = @"no photo size 1024";
+                }
+                if (stringViewCountPhoto == NULL) {
+                    stringViewCountPhoto = @"0";
+                }
+                
+                [mutableDictionaryPhotoItem setObject:stringPhotoID forKey:@"photoId"];
+                [mutableDictionaryPhotoItem setObject:stringTitlePhoto forKey:@"title"];
+                [mutableDictionaryPhotoItem setObject:stringNameUser forKey:@"username"];
+                [mutableDictionaryPhotoItem setObject:stringRealNameUser forKey:@"realname"];
+                [mutableDictionaryPhotoItem setObject:stringLocationUser forKey:@"loacation"];
+                [mutableDictionaryPhotoItem setObject:stringUrlIConUser forKey:@"urlicon"];
+                [mutableDictionaryPhotoItem setObject:stringDatePhotoUpload forKey:@"dateupload"];
+                [mutableDictionaryPhotoItem setObject:stringDescriptionPhoto forKey:@"description"];
+                [mutableDictionaryPhotoItem setObject:stringUrlPhotoSize150 forKey:@"photosize150"];
+                [mutableDictionaryPhotoItem setObject:stringUrlPhotoSize240 forKey:@"photosize240"];
+                [mutableDictionaryPhotoItem setObject:stringUrlPhotoSize1024 forKey:@"photosize1024"];
+                [mutableDictionaryPhotoItem setObject:stringViewCountPhoto forKey:@"viewCount"];
+                
+                [mutableArraySaveDataCell addObject:mutableDictionaryPhotoItem];
+                
+                RELEASE_OBJECT(mutableDictionaryPhotoItem);
             }
-            if (stringNameUser == NULL) {
-                stringNameUser = @"no name";
-            }
-            if (stringRealNameUser == NULL) {
-                stringRealNameUser = @"no real name";
-            }
-            if (stringLocationUser == NULL) {
-                stringLocationUser = @"no location";
-            }
-            if (stringUrlIConUser == NULL) {
-                stringUrlIConUser = @"no url icon";
-            }
-            if (stringDatePhotoUpload == NULL) {
-                stringDatePhotoUpload = @"no date photo";
-            }
-            if (stringDescriptionPhoto == NULL) {
-                stringDescriptionPhoto = @"no descreption";
-            }
-            if (stringUrlPhotoSize150 == NULL) {
-                stringUrlPhotoSize150 = @"no photo size 150";
-            }
-            if (stringUrlPhotoSize240 == NULL) {
-                stringUrlPhotoSize240 = @"no photo size 240";
-            }
-            if (stringUrlPhotoSize1024 == NULL) {
-                stringUrlPhotoSize1024 = @"no photo size 1024";
-            }
-            if (stringViewCountPhoto == NULL) {
-                stringViewCountPhoto = @"0";
-            }
-            
-            [mutableDictionaryPhotoItem setObject:stringPhotoID forKey:@"photoId"];
-            [mutableDictionaryPhotoItem setObject:stringTitlePhoto forKey:@"title"];
-            [mutableDictionaryPhotoItem setObject:stringNameUser forKey:@"username"];
-            [mutableDictionaryPhotoItem setObject:stringRealNameUser forKey:@"realname"];
-            [mutableDictionaryPhotoItem setObject:stringLocationUser forKey:@"loacation"];
-            [mutableDictionaryPhotoItem setObject:stringUrlIConUser forKey:@"urlicon"];
-            [mutableDictionaryPhotoItem setObject:stringDatePhotoUpload forKey:@"dateupload"];
-            [mutableDictionaryPhotoItem setObject:stringDescriptionPhoto forKey:@"description"];
-            [mutableDictionaryPhotoItem setObject:stringUrlPhotoSize150 forKey:@"photosize150"];
-            [mutableDictionaryPhotoItem setObject:stringUrlPhotoSize240 forKey:@"photosize240"];
-            [mutableDictionaryPhotoItem setObject:stringUrlPhotoSize1024 forKey:@"photosize1024"];
-            [mutableDictionaryPhotoItem setObject:stringViewCountPhoto forKey:@"viewCount"];
-            
-            [mutableArraySaveDataCell addObject:mutableDictionaryPhotoItem];
-            
-            RELEASE_OBJECT(mutableDictionaryPhotoItem);
             
         }
     }
@@ -394,6 +389,7 @@
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if (mutableArraySaveDataCell.count > 0) {
+        
         NSDictionary *dictionaryPhotoItemCell = [mutableArraySaveDataCell objectAtIndex:indexPath.row];
         
         //get info user(username, location, url Image)
@@ -412,21 +408,12 @@
         cell.labelCountView.text = stringViewCountPhoto;
         [cell.imageViewDescription setImageWithURL:[NSURL URLWithString:stringUrlPhoto]];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        if ((indexPath.row+1) == indexCellLoader && (indexPath.row+1) != mutableArraySaveResuilData.count) {
-            imageViewBackGroudLoad.alpha = 0.3;
-            [imageViewBackGroudLoad setUserInteractionEnabled:YES];
-            [activityIndicatorviewLoadingSearch startAnimating];
-            double delayInSeconds = .1;
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                imageViewBackGroudLoad.alpha = 0;
-                [imageViewBackGroudLoad setUserInteractionEnabled:NO];
-                [activityIndicatorviewLoadingSearch stopAnimating];
-                
+        if ((indexPath.row+1) == indexCellLoader && (indexPath.row+1) < mutableArraySaveResuilData.count) {
+            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+            dispatch_async(queue, ^ {
                 indexCellLoader = indexPath.row+10;
                 [self GetDataPhotoForCell:indexCellLoader];
                 [tableViewResuil reloadData];
-                
             });
         }
     }
@@ -452,7 +439,6 @@
 
     return 250;
 }
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PKCustomCellViewController.h"
 #import "Reachability.h"
-@interface PFSearchViewController : UIViewController <UISearchBarDelegate>
+@interface PFSearchViewController : UIViewController <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate>
 {
 
     IBOutlet UISearchBar *searchBarPhoto;
@@ -24,6 +24,7 @@
     int indexCellLoader;
     UIImageView *imageViewBackGroudLoad;
     UIActivityIndicatorView *activityIndicatorviewLoadingSearch;
+    BOOL endOfLoading;
 }
 -(void)searchBarSetUp;
 -(void)changerSetUpNavigationBar;

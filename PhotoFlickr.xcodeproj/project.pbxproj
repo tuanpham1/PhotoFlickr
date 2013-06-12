@@ -21,7 +21,6 @@
 		8C874DB9176188710033ECBB /* PFDetailPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C874D89176188710033ECBB /* PFDetailPhotoViewController.m */; };
 		8C874DBA176188710033ECBB /* PFDetailPhotoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C874D8A176188710033ECBB /* PFDetailPhotoViewController.xib */; };
 		8C874DBB176188710033ECBB /* PFSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C874D8D176188710033ECBB /* PFSearchViewController.m */; };
-		8C874DBC176188710033ECBB /* PFSearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C874D8E176188710033ECBB /* PFSearchViewController.xib */; };
 		8C874DBD176188710033ECBB /* PKCustomCellViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C874D92176188710033ECBB /* PKCustomCellViewController.m */; };
 		8C874DBE176188710033ECBB /* PKCustomCellViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C874D93176188710033ECBB /* PKCustomCellViewController.xib */; };
 		8C874DC9176188710033ECBB /* icon-back.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 8C874DB1176188710033ECBB /* icon-back.jpeg */; };
@@ -41,6 +40,7 @@
 		8C874E421761D40C0033ECBB /* XMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C874E411761D40C0033ECBB /* XMLReader.m */; };
 		8CF4A9E41765847000C04106 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF4A9E31765847000C04106 /* Reachability.m */; };
 		8CF4A9E61765858E00C04106 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CF4A9E51765858E00C04106 /* SystemConfiguration.framework */; };
+		8CFC413417672822003547DD /* PFSearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CFC413317672822003547DD /* PFSearchViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,7 +65,6 @@
 		8C874D8A176188710033ECBB /* PFDetailPhotoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PFDetailPhotoViewController.xib; sourceTree = "<group>"; };
 		8C874D8C176188710033ECBB /* PFSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFSearchViewController.h; sourceTree = "<group>"; };
 		8C874D8D176188710033ECBB /* PFSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFSearchViewController.m; sourceTree = "<group>"; };
-		8C874D8E176188710033ECBB /* PFSearchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PFSearchViewController.xib; sourceTree = "<group>"; };
 		8C874D91176188710033ECBB /* PKCustomCellViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKCustomCellViewController.h; sourceTree = "<group>"; };
 		8C874D92176188710033ECBB /* PKCustomCellViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKCustomCellViewController.m; sourceTree = "<group>"; };
 		8C874D93176188710033ECBB /* PKCustomCellViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PKCustomCellViewController.xib; sourceTree = "<group>"; };
@@ -100,6 +99,7 @@
 		8CF4A9E21765847000C04106 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		8CF4A9E31765847000C04106 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		8CF4A9E51765858E00C04106 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		8CFC413317672822003547DD /* PFSearchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PFSearchViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,7 +233,7 @@
 			children = (
 				8C874D8C176188710033ECBB /* PFSearchViewController.h */,
 				8C874D8D176188710033ECBB /* PFSearchViewController.m */,
-				8C874D8E176188710033ECBB /* PFSearchViewController.xib */,
+				8CFC413317672822003547DD /* PFSearchViewController.xib */,
 			);
 			path = "Search Screen";
 			sourceTree = "<group>";
@@ -396,7 +396,6 @@
 				8C874D70176188120033ECBB /* Default-568h@2x.png in Resources */,
 				8C874DB8176188710033ECBB /* PFImageDetailViewController.xib in Resources */,
 				8C874DBA176188710033ECBB /* PFDetailPhotoViewController.xib in Resources */,
-				8C874DBC176188710033ECBB /* PFSearchViewController.xib in Resources */,
 				8C874DBE176188710033ECBB /* PKCustomCellViewController.xib in Resources */,
 				8C874DC9176188710033ECBB /* icon-back.jpeg in Resources */,
 				8C874DCA176188710033ECBB /* icon-search.jpeg in Resources */,
@@ -405,6 +404,7 @@
 				8C874DCD176188710033ECBB /* logo-search.jpg in Resources */,
 				8C874DE317618C700033ECBB /* LICENSE in Resources */,
 				8C874DE417618C700033ECBB /* README.md in Resources */,
+				8CFC413417672822003547DD /* PFSearchViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,10 +498,15 @@
 		8C874D7A176188120033ECBB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Thao Nguyen Minh (CJ2KDSD4NE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Thao Nguyen Minh (CJ2KDSD4NE)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PhotoFlickr/PhotoFlickr-Prefix.pch";
 				INFOPLIST_FILE = "PhotoFlickr/PhotoFlickr-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "3B6CCA14-1B33-4C2F-A88D-5A33DFB8EDC6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3B6CCA14-1B33-4C2F-A88D-5A33DFB8EDC6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -509,10 +514,15 @@
 		8C874D7B176188120033ECBB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Thao Nguyen Minh (CJ2KDSD4NE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Thao Nguyen Minh (CJ2KDSD4NE)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PhotoFlickr/PhotoFlickr-Prefix.pch";
 				INFOPLIST_FILE = "PhotoFlickr/PhotoFlickr-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "3B6CCA14-1B33-4C2F-A88D-5A33DFB8EDC6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3B6CCA14-1B33-4C2F-A88D-5A33DFB8EDC6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
