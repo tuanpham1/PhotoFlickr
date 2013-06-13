@@ -44,10 +44,11 @@
     searchBarPhoto.delegate = self;
     [self searchBarSetUp];
     
-//    float widthScreen = [UIScreen mainScreen].bounds.size.width;
-//    float heightScreen = [UIScreen mainScreen].bounds.size.height;
-//    tableViewResuil.frame = CGRectMake(0, 0, widthScreen, 548);
-//    NSLog(@"widthScreen:%f -- heightScreen:%f",widthScreen,heightScreen);
+    widthScreen = [UIScreen mainScreen].bounds.size.width;
+    heightScreen = [UIScreen mainScreen].bounds.size.height;
+    
+    self.view.frame = CGRectMake(0, 0, widthScreen, heightScreen);
+    tableViewResuil.frame = CGRectMake(0, 60, widthScreen, heightScreen-60);
     
     labelTitleApp = [[UILabel alloc] initWithFrame:CGRectMake(55, 15, 200, 20)];
     labelTitleApp.backgroundColor = [UIColor clearColor];
@@ -67,15 +68,16 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (changerSetUpNavigationBar:) name:@"ChangerNavigationBar" object:nil];
     
     
-    imageViewBackGroudLoad = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 548)];
+    imageViewBackGroudLoad = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, widthScreen, heightScreen)];
     [imageViewBackGroudLoad setUserInteractionEnabled:NO];
     imageViewBackGroudLoad.backgroundColor = [UIColor blackColor];
     imageViewBackGroudLoad.alpha = 0;
     [self.view addSubview:imageViewBackGroudLoad];
 	
     activityIndicatorviewLoadingSearch = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    activityIndicatorviewLoadingSearch.frame = CGRectMake(150, 150, 37, 37);
-    activityIndicatorviewLoadingSearch.backgroundColor = [UIColor blackColor];
+    activityIndicatorviewLoadingSearch.frame = CGRectMake(130, 130, 50, 50);
+    activityIndicatorviewLoadingSearch.center = CGPointMake(widthScreen/2, widthScreen/2);
+    activityIndicatorviewLoadingSearch.backgroundColor = [UIColor clearColor];
     [activityIndicatorviewLoadingSearch stopAnimating];
     [self.view addSubview:activityIndicatorviewLoadingSearch];
     
@@ -201,7 +203,6 @@
             [(UITextField *)subview setEnablesReturnKeyAutomatically:NO];
         }
     }
-    
 }
 // Sau khi ket thuc nhap key
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
@@ -210,9 +211,12 @@
 }
 // Sau khi search button duoc click
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    
+    //[self moveAllDocs];
+    
     [searchBar resignFirstResponder];
 	[searchBar setShowsCancelButton:NO animated:YES];
-    
+    [self CheckConnectInternet];
     imageViewBackGroudLoad.alpha = 0.3;
     [imageViewBackGroudLoad setUserInteractionEnabled:YES];
     [activityIndicatorviewLoadingSearch startAnimating];
@@ -223,7 +227,6 @@
         imageViewBackGroudLoad.alpha = 0;
         [imageViewBackGroudLoad setUserInteractionEnabled:NO];
         [activityIndicatorviewLoadingSearch stopAnimating];
-        [self CheckConnectInternet];
         if (searchBar.text.length > 0) {
             indexCellLoader = 10;
             [mutableArraySaveDataCell removeAllObjects];
@@ -236,13 +239,13 @@
             for (NSDictionary *dictionaryPhotoItem in dictionaryPhoto) {
                 i++;
                 [mutableArraySaveResuilData addObject:dictionaryPhotoItem];
-                
             }
             if (mutableArraySaveResuilData.count > 0) {
                 [self GetDataPhotoForCell:indexCellLoader];
-                labelNumberResuil.text = [NSString stringWithFormat:@"Results found: %i photos",i];
+                labelNumberResuil.text = [NSString stringWithFormat:@"    Results found: %i photos",i];
                 tableViewResuil.hidden = NO;
                 [tableViewResuil reloadData];
+                
             } else {
                 
                 labelNumberResuil.text = @"Not fine resuil!";
@@ -347,7 +350,7 @@
                 [mutableDictionaryPhotoItem setObject:stringTitlePhoto forKey:@"title"];
                 [mutableDictionaryPhotoItem setObject:stringNameUser forKey:@"username"];
                 [mutableDictionaryPhotoItem setObject:stringRealNameUser forKey:@"realname"];
-                [mutableDictionaryPhotoItem setObject:stringLocationUser forKey:@"loacation"];
+                [mutableDictionaryPhotoItem setObject:stringLocationUser forKey:@"location"];
                 [mutableDictionaryPhotoItem setObject:stringUrlIConUser forKey:@"urlicon"];
                 [mutableDictionaryPhotoItem setObject:stringDatePhotoUpload forKey:@"dateupload"];
                 [mutableDictionaryPhotoItem setObject:stringDescriptionPhoto forKey:@"description"];
@@ -360,16 +363,12 @@
                 
                 RELEASE_OBJECT(mutableDictionaryPhotoItem);
             }
-            
         }
     }
-    
-
 }
 - (NSString*)convertDateStringMySetup:(NSString*)inputDateString{
     NSString *trimmedString = [inputDateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    //    NSString *string1=[inputDateString stringByAppendingString:@" 00:00:00 +0000"];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSDate *date1 = [dateFormatter dateFromString:trimmedString];
     [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
@@ -384,7 +383,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
-        return indexCellLoader;
+        return mutableArraySaveDataCell.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -405,7 +404,7 @@
         //get info user(username, location, url Image)
         NSString *stringUrlIconUser = [dictionaryPhotoItemCell objectForKey:@"urlicon"];
         NSString *stringNameUser = [dictionaryPhotoItemCell objectForKey:@"username"];
-        NSString *stringLocationUser = [dictionaryPhotoItemCell objectForKey:@"loacation"];
+        NSString *stringLocationUser = [dictionaryPhotoItemCell objectForKey:@"location"];
         NSString *stringDatePhotoUpload = [dictionaryPhotoItemCell objectForKey:@"dateupload"];
         NSString *stringViewCountPhoto = [NSString stringWithFormat:@"Views: %@",[dictionaryPhotoItemCell objectForKey:@"viewCount"]] ;
         NSString *stringUrlPhoto = [dictionaryPhotoItemCell objectForKey:@"photosize150"];
@@ -418,12 +417,19 @@
         cell.labelCountView.text = stringViewCountPhoto;
         [cell.imageViewDescription setImageWithURL:[NSURL URLWithString:stringUrlPhoto]];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        if ((indexPath.row+1) == indexCellLoader && (indexPath.row+1) < mutableArraySaveResuilData.count) {
+        
+        if ((indexPath.row+1) == indexCellLoader && (indexPath.row+1) < mutableArraySaveResuilData.count && mutableArraySaveDataCell.count < mutableArraySaveResuilData.count) {
+            [searchBarPhoto setUserInteractionEnabled:NO];
+            [activityIndicatorviewLoadingSearch startAnimating];
+            activityIndicatorviewLoadingSearch.frame = CGRectMake(130, widthScreen+60, 50, 50);
             dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             dispatch_async(queue, ^ {
-                indexCellLoader = indexPath.row+10;
-                [self GetDataPhotoForCell:indexCellLoader];
-                [tableViewResuil reloadData];
+                    indexCellLoader = indexPath.row+11;
+                    [self GetDataPhotoForCell:indexCellLoader];
+                    [tableViewResuil reloadData];
+                    [searchBarPhoto setUserInteractionEnabled:YES];
+                    [activityIndicatorviewLoadingSearch stopAnimating];
+                    activityIndicatorviewLoadingSearch.center = CGPointMake(widthScreen/2, heightScreen/2);
             });
             dispatch_release(queue);
         }

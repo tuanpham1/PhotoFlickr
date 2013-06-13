@@ -36,17 +36,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    float widthScreen = [UIScreen mainScreen].bounds.size.width;
+    float heightScreen = [UIScreen mainScreen].bounds.size.height;
+    self.view.frame = CGRectMake(0, 0, widthScreen, heightScreen);
+    
     [self.scrollView setUserInteractionEnabled:YES];
     [self.imageView setUserInteractionEnabled:YES];
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage:[UIImage imageNamed:@"bg-BackButton.png"] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(backScreenBegin:) forControlEvents:UIControlEventTouchDown];
     button.frame = CGRectMake(0, 16, 51, 30);
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
     [self.navigationItem setLeftBarButtonItem:barButtonItem];
-    
- 
     
     UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:stringSaveNameImage]]];
     self.imageView = [[UIImageView alloc] initWithImage:image];

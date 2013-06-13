@@ -25,10 +25,10 @@
     int indexCellLoader;
     UIImageView *imageViewBackGroudLoad;
     UIActivityIndicatorView *activityIndicatorviewLoadingSearch;
-    BOOL endOfLoading;
+    float widthScreen;
+    float heightScreen;
 }
 -(void)searchBarSetUp;
--(void)changerSetUpNavigationBar;
 -(NSDictionary *)GetResuilSearchPhoto:(NSString *)aKeySearch;
 -(NSDictionary *)GetInfoPhotoItem:(NSString *)aPhotoID andSecretPhoto:(NSString *)secretPhoto;
 -(void)GetDataPhotoForCell:(int)indexRow;

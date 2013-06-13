@@ -40,10 +40,15 @@
 {
     [super viewDidLoad];
     
+    widthScreen = [UIScreen mainScreen].bounds.size.width;
+    heightScreen = [UIScreen mainScreen].bounds.size.height;
+    self.view.frame = CGRectMake(0, 0, widthScreen, heightScreen);
+    scrollViewAllDetail.frame = CGRectMake(0, 10, widthScreen, heightScreen);
+    scrollViewAllDetail.contentSize = CGSizeMake(widthScreen, heightScreen);
     indexScrollPage = 0;
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-searchBar.png"]];
     //get info user(username, location, url Image)
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage:[UIImage imageNamed:@"bg-BackButton.png"] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(backScreenSearch:) forControlEvents:UIControlEventTouchDown];
     button.frame = CGRectMake(0, 16, 51, 31);
@@ -55,7 +60,6 @@
     labelTitleImage.backgroundColor = [UIColor clearColor];
     labelTitleImage.textColor = [UIColor whiteColor];
     [self.navigationController.navigationBar addSubview:labelTitleImage];
-    scrollViewAllDetail.contentSize = CGSizeMake(320*mutableArrayDetailPhoto.count, 448);
     scrollViewAllDetail.pagingEnabled = YES;
     scrollViewAllDetail.scrollEnabled = YES;
     NSDictionary *dictionaryDetailItemTitle  = [mutableArrayDetailPhoto objectAtIndex:0];
@@ -63,23 +67,16 @@
     labelTitleImage.text = stringTitlePhoto;
     NSDictionary *dictionaryDetailItem  = [mutableArrayDetailPhoto objectAtIndex:0];
     [self loadDetailPhoto:dictionaryDetailItem indexOriginX:0];
-    double delayInSeconds = .5;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-    
-        for (int i = 1; i < mutableArrayDetailPhoto.count; i++) {
-            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-            dispatch_async(queue, ^ {
-            float indexOriginX = (i*320);
-                NSLog(@"I:%i -- Array:%i",i,mutableArrayDetailPhoto.count);
-            NSDictionary *dictionaryDetailItem  = [mutableArrayDetailPhoto objectAtIndex:i];
-            [self loadDetailPhoto:dictionaryDetailItem indexOriginX:indexOriginX];
-            });
-            dispatch_release(queue);
-        }
+    indexPageLoader = 1;
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^ {
+    float indexOriginX = (1*widthScreen);
+        NSDictionary *dictionaryDetailItem1  = [mutableArrayDetailPhoto objectAtIndex:1];
+        [self loadDetailPhoto:dictionaryDetailItem1 indexOriginX:indexOriginX];
     });
-    
+    dispatch_release(queue);
 }
+
 -(IBAction)backScreenSearch:(id)sender{
     labelTitleImage.hidden = YES;
     UIButton *buttonBack = (UIButton *)sender;
@@ -100,10 +97,10 @@
 }
 -(void)loadDetailPhoto:(NSDictionary *)aDictionaryPhoto indexOriginX:(float)originX {
     //Scroll Screen Item
-    UIScrollView *scrollViewScreenDetailItem = [[UIScrollView alloc] initWithFrame:CGRectMake(originX, 30, 320, 548)];
-    scrollViewScreenDetailItem.contentSize = CGSizeMake(320, 700);
+    UIScrollView *scrollViewScreenDetailItem = [[UIScrollView alloc] initWithFrame:CGRectMake(originX, 0, widthScreen, heightScreen-50)];
     [scrollViewScreenDetailItem setUserInteractionEnabled:YES];
     [scrollViewAllDetail addSubview:scrollViewScreenDetailItem];
+    scrollViewScreenDetailItem.contentSize = CGSizeMake(widthScreen, 600);
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
     scrollViewScreenDetailItem.contentInset = contentInsets;
     //Scroll Comment
@@ -184,7 +181,7 @@
     NSString *stringUrlIconUser = [aDictionaryPhoto objectForKey:@"urlicon"];
     NSString *stringNameUser = [aDictionaryPhoto objectForKey:@"username"];
     NSString *stringRealNameUser = [aDictionaryPhoto objectForKey:@"realname"];
-    NSString *stringLocationUser = [aDictionaryPhoto objectForKey:@"loacation"];
+    NSString *stringLocationUser = [aDictionaryPhoto objectForKey:@"location"];
     NSString *stringDatePhotoUpload = [aDictionaryPhoto objectForKey:@"dateupload"];
     NSString *stringViewCountPhoto = [NSString stringWithFormat:@"Views: %@",[aDictionaryPhoto objectForKey:@"viewCount"]] ;
     NSString *stringUrlPhoto = [aDictionaryPhoto objectForKey:@"photosize240"];
@@ -207,24 +204,28 @@
     NSDictionary *dictionaryCommentPhotoRsp = [dictionaryCommentPhoto objectForKey:@"rsp"];
     NSDictionary *dictionaryCommentPhotoComments = [dictionaryCommentPhotoRsp objectForKey:@"comments"];
     if (dictionaryCommentPhotoComments.count == 3) {
+        
         NSDictionary *dictionaryCommentPhotoComment = [dictionaryCommentPhotoComments objectForKey:@"comment"];
-        for (NSDictionary *dictionaryCommentItem in dictionaryCommentPhotoComment) {
-            [mutableArrayComment addObject:dictionaryCommentItem];
+        if (dictionaryCommentPhotoComment.count != 8) {
+            for (NSDictionary *dictionaryCommentItem in dictionaryCommentPhotoComment) {
+                [mutableArrayComment addObject:dictionaryCommentItem];
+            }
         }
     }
     labelTitleComment.text = [NSString stringWithFormat:@"Comment for this photo: %i comments",[mutableArrayComment count]];
     if (mutableArrayComment.count > 0) {
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        dispatch_async(queue, ^ {
+        //dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        //dispatch_async(queue, ^ {
             [self loadDataComment:scrollViewComment aMutableArray:mutableArrayComment];
-        });
-        dispatch_release(queue);
+        //});
+        ///dispatch_release(queue);
     }
     UITapGestureRecognizer *sigleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(ClickImageDetail:)];
     [imageViewDetail addGestureRecognizer:sigleTap];
     
-    RELEASE_OBJECT(scrollViewScreenDetailItem);
-    RELEASE_OBJECT(scrollViewComment);
+    //float sizeFrameWidth = scrollViewAllDetail.frame.size.width + widthScreen;
+    scrollViewAllDetail.contentSize = CGSizeMake(originX+widthScreen, heightScreen-50);
+    
     RELEASE_OBJECT(imageViewAvatarUser);
     RELEASE_OBJECT(imageViewDetail);
     RELEASE_OBJECT(labelNameUser);
@@ -235,6 +236,9 @@
     RELEASE_OBJECT(labelTitleDescription);
     RELEASE_OBJECT(labelTitleComment);
     RELEASE_OBJECT(mutableArrayComment);
+    RELEASE_OBJECT(scrollViewComment);
+    RELEASE_OBJECT(scrollViewDescription);
+    RELEASE_OBJECT(scrollViewScreenDetailItem);
 }
 -(void)loadDataComment:(UIScrollView *)aScrollView  aMutableArray:(NSMutableArray *) mutableArrayComment{
     float indexFrameYView = 10;
@@ -256,7 +260,7 @@
         int indexLine = length;
         //ceilf(stringTextComment.length/46.0);
         float indexFrameYComment = indexLine*13;
-        UIView *viewItemComment = [[UIView alloc] initWithFrame:CGRectMake(0, indexFrameYView, 320, 40*indexFrameYComment)];
+        UIView *viewItemComment = [[UIView alloc] initWithFrame:CGRectMake(0, indexFrameYView, widthScreen, 40*indexFrameYComment)];
         [aScrollView addSubview:viewItemComment];
         UIImageView *imageViewAvatarComment = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
         [imageViewAvatarComment setImageWithURL:[NSURL URLWithString:stringUrlIConUserComment]];
@@ -322,6 +326,23 @@
         NSDictionary *dictionaryDetailItemTitle  = [mutableArrayDetailPhoto objectAtIndex:pageNum];
         NSString *stringTitlePhoto = [dictionaryDetailItemTitle objectForKey:@"title"];
         labelTitleImage.text = stringTitlePhoto;
+        if (indexPageLoader == pageNum) {
+            indexPageLoader = pageNum+1;
+            NSString *stringIndexPage = [NSString stringWithFormat:@"%i",pageNum];
+            [self performSelectorInBackground:@selector(NextLoadPageScroll:) withObject:stringIndexPage];
+           
+        }
+    }
+}
+-(void)NextLoadPageScroll:(NSString *)aIndexPage {
+    int pageNum = [aIndexPage intValue];
+    for (int i = pageNum+1; i < pageNum+2; i++) {
+        if (i < mutableArrayDetailPhoto.count || i < 50) {
+            
+            float indexOriginX = (i*widthScreen);
+            NSDictionary *dictionaryDetailItem  = [mutableArrayDetailPhoto objectAtIndex:i];
+            [self loadDetailPhoto:dictionaryDetailItem indexOriginX:indexOriginX];
+        }
     }
 }
 - (void)didReceiveMemoryWarning
