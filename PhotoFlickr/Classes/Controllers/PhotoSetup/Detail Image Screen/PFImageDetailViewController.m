@@ -8,6 +8,7 @@
 
 #import "PFImageDetailViewController.h"
 #import "MacroSandbox.h"
+
 @interface PFImageDetailViewController ()
 
 @property (nonatomic, strong) UIImageView *imageView;
@@ -160,5 +161,4 @@
     // The scroll view has zoomed, so we need to re-center the contents
     [self centerScrollViewContents];
 }
-
 @end

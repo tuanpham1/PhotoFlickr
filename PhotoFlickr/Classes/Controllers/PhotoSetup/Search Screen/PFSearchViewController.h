@@ -27,6 +27,7 @@
     UIActivityIndicatorView *activityIndicatorviewLoadingSearch;
     float widthScreen;
     float heightScreen;
+    BOOL stopRun;
 }
 -(void)searchBarSetUp;
 -(NSDictionary *)GetResuilSearchPhoto:(NSString *)aKeySearch;

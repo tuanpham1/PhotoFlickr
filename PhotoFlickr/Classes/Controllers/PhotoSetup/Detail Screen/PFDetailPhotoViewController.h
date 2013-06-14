@@ -17,6 +17,7 @@
     int indexPageLoader;
     float widthScreen;
     float heightScreen;
+    BOOL stopRuning;
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil aDictionaryItem:(NSDictionary *)dictionaryItem indexPath:(int)indexPath;
 -(NSDictionary *)GetInfoCommentsPhoto:(NSString *)aPhotoId;

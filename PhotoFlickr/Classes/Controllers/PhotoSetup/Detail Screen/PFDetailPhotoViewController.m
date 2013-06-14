@@ -11,6 +11,7 @@
 #import "QuartzCore/QuartzCore.h"
 #import "MacroSandbox.h"
 #import "UIImageView+WebCache.h"
+#import "SDImageCache.h"
 #import "XMLReader.h"
 @interface PFDetailPhotoViewController ()
 
@@ -39,7 +40,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     widthScreen = [UIScreen mainScreen].bounds.size.width;
     heightScreen = [UIScreen mainScreen].bounds.size.height;
     self.view.frame = CGRectMake(0, 0, widthScreen, heightScreen);
@@ -258,7 +258,6 @@
                              [NSCharacterSet newlineCharacterSet]] count];
         
         int indexLine = length;
-        //ceilf(stringTextComment.length/46.0);
         float indexFrameYComment = indexLine*13;
         UIView *viewItemComment = [[UIView alloc] initWithFrame:CGRectMake(0, indexFrameYView, widthScreen, 40*indexFrameYComment)];
         [aScrollView addSubview:viewItemComment];
@@ -328,7 +327,7 @@
         labelTitleImage.text = stringTitlePhoto;
         if (indexPageLoader == pageNum) {
             indexPageLoader = pageNum+1;
-            NSString *stringIndexPage = [NSString stringWithFormat:@"%i",pageNum];
+            NSString *stringIndexPage = [NSString stringWithFormat:@"%i",indexPageLoader];
             [self performSelectorInBackground:@selector(NextLoadPageScroll:) withObject:stringIndexPage];
            
         }
@@ -336,19 +335,20 @@
 }
 -(void)NextLoadPageScroll:(NSString *)aIndexPage {
     int pageNum = [aIndexPage intValue];
-    for (int i = pageNum+1; i < pageNum+2; i++) {
-        if (i < mutableArrayDetailPhoto.count || i < 50) {
-            
-            float indexOriginX = (i*widthScreen);
-            NSDictionary *dictionaryDetailItem  = [mutableArrayDetailPhoto objectAtIndex:i];
+        if (pageNum < mutableArrayDetailPhoto.count) {
+            float indexOriginX = (pageNum*widthScreen);
+            NSDictionary *dictionaryDetailItem  = [mutableArrayDetailPhoto objectAtIndex:pageNum];
             [self loadDetailPhoto:dictionaryDetailItem indexOriginX:indexOriginX];
-        }
     }
 }
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
+    SDImageCache *imageCache = [SDImageCache sharedImageCache];
+    [imageCache clearMemory];
+    [imageCache clearDisk];
+    [imageCache cleanDisk];
 }
 
 @end

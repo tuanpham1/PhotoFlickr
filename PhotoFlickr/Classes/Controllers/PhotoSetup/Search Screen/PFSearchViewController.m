@@ -11,6 +11,7 @@
 #import "XMLReader.h"
 #import "MacroSandbox.h"
 #import "UIImageView+WebCache.h"
+#import "SDImageCache.h"
 
 @implementation PFSearchViewController
 
@@ -195,6 +196,7 @@
 }
 // Khi search bar bat dau nhap key
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    stopRun = YES;
     searchBar.text = @"";
 	[searchBar becomeFirstResponder];
     for (UIView *subview in [searchBarPhoto subviews]) {
@@ -211,9 +213,6 @@
 }
 // Sau khi search button duoc click
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    
-    //[self moveAllDocs];
-    
     [searchBar resignFirstResponder];
 	[searchBar setShowsCancelButton:NO animated:YES];
     [self CheckConnectInternet];
@@ -241,6 +240,7 @@
                 [mutableArraySaveResuilData addObject:dictionaryPhotoItem];
             }
             if (mutableArraySaveResuilData.count > 0) {
+                stopRun = NO;
                 [self GetDataPhotoForCell:indexCellLoader];
                 labelNumberResuil.text = [NSString stringWithFormat:@"    Results found: %i photos",i];
                 tableViewResuil.hidden = NO;
@@ -270,6 +270,10 @@
     {
         for (int i = mutableArraySaveDataCell.count; i < indexRow ; i++) {
             if (i < mutableArraySaveResuilData.count) {
+                if (stopRun == YES) {
+                    indexCellLoader = i;
+                    return;
+                }
                 NSDictionary *dictionaryPhotoItem = [mutableArraySaveResuilData objectAtIndex:i];
                 NSString *stringPhotoID = [dictionaryPhotoItem objectForKey:@"id"];
                 NSString *stringSecret = [dictionaryPhotoItem objectForKey:@"secret"];
@@ -419,16 +423,16 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         if ((indexPath.row+1) == indexCellLoader && (indexPath.row+1) < mutableArraySaveResuilData.count && mutableArraySaveDataCell.count < mutableArraySaveResuilData.count) {
-            [searchBarPhoto setUserInteractionEnabled:NO];
             [activityIndicatorviewLoadingSearch startAnimating];
-            activityIndicatorviewLoadingSearch.frame = CGRectMake(130, widthScreen+60, 50, 50);
+            activityIndicatorviewLoadingSearch.frame = CGRectMake(130, widthScreen+50, 50, 50);
             dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             dispatch_async(queue, ^ {
+                    stopRun = NO;
                     indexCellLoader = indexPath.row+11;
                     [self GetDataPhotoForCell:indexCellLoader];
-                    [tableViewResuil reloadData];
-                    [searchBarPhoto setUserInteractionEnabled:YES];
                     [activityIndicatorviewLoadingSearch stopAnimating];
+                    [tableViewResuil reloadData];
+                    
                     activityIndicatorviewLoadingSearch.center = CGPointMake(widthScreen/2, heightScreen/2);
             });
             dispatch_release(queue);
@@ -442,6 +446,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([mutableArraySaveDataCell count] > 0) {
+        stopRun = YES;
         labelTitleApp.hidden = YES;
         searchBarPhoto.hidden = YES;
         imageViewSearchIcon.hidden = YES;
@@ -460,7 +465,11 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
+    SDImageCache *imageCache = [SDImageCache sharedImageCache];
+    [imageCache clearMemory];
+    [imageCache clearDisk];
+    [imageCache cleanDisk];
 }
 
 @end
