@@ -47,7 +47,7 @@
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage:[UIImage imageNamed:@"bg-BackButton.png"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(backScreenBegin:) forControlEvents:UIControlEventTouchDown];
+    [button addTarget:self action:@selector(backScreenWithBeginScreen:) forControlEvents:UIControlEventTouchDown];
     button.frame = CGRectMake(0, 16, 51, 30);
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
     [self.navigationItem setLeftBarButtonItem:barButtonItem];
@@ -62,13 +62,13 @@
     // Tell the scroll view the size of the contents
     self.scrollView.contentSize = image.size;
     //Zoom images When double tap img
-    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollViewDoubleTapped:)];
+    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapScrollViewWithDouble:)];
     doubleTapRecognizer.numberOfTapsRequired = 2;
     doubleTapRecognizer.numberOfTouchesRequired = 1;
     [self.scrollView addGestureRecognizer:doubleTapRecognizer];
     
     //Zoom Images When Scale images
-    UITapGestureRecognizer *twoFingerTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollViewTwoFingerTapped:)];
+    UITapGestureRecognizer *twoFingerTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapScrollViewWithTwoFinger:)];
     twoFingerTapRecognizer.numberOfTapsRequired = 1;
     twoFingerTapRecognizer.numberOfTouchesRequired = 2;
     [self.scrollView addGestureRecognizer:twoFingerTapRecognizer];
@@ -78,7 +78,7 @@
     RELEASE_OBJECT(doubleTapRecognizer);
     RELEASE_OBJECT(twoFingerTapRecognizer);
 }
--(IBAction)backScreenBegin:(id)sender{
+-(IBAction)backScreenWithBeginScreen:(id)sender{
     UIButton *buttonBack = (UIButton *)sender;
     buttonBack.frame = CGRectMake(0, 0, 0, 0);
     [self.navigationController popViewControllerAnimated:YES];
@@ -111,9 +111,9 @@
     self.imageView.frame = contentsFrame;
 }
 
-- (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer {
+- (void)tapScrollViewWithDouble:(UITapGestureRecognizer*)arecognizer {
     // Get the location within the image view where we tapped
-    CGPoint pointInView = [recognizer locationInView:self.imageView];
+    CGPoint pointInView = [arecognizer locationInView:self.imageView];
     // Get a zoom scale that's zoomed in slightly, capped at the maximum zoom scale specified by the scroll view
     CGFloat newZoomScale = self.scrollView.zoomScale * 1.5f;
     newZoomScale = MIN(newZoomScale, self.scrollView.maximumZoomScale);
@@ -131,7 +131,7 @@
     [self.scrollView zoomToRect:rectToZoomTo animated:YES];
 }
 
-- (void)scrollViewTwoFingerTapped:(UITapGestureRecognizer*)recognizer {
+- (void)tapScrollViewWithTwoFinger:(UITapGestureRecognizer*)arecognizer {
     // Zoom out slightly, capping at the minimum zoom scale specified by the scroll view
     CGFloat newZoomScale = self.scrollView.zoomScale / 1.5f;
     newZoomScale = MAX(newZoomScale, self.scrollView.minimumZoomScale);

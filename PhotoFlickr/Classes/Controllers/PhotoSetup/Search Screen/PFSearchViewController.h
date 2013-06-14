@@ -29,10 +29,10 @@
     float heightScreen;
     BOOL stopRun;
 }
--(void)searchBarSetUp;
--(NSDictionary *)GetResuilSearchPhoto:(NSString *)aKeySearch;
--(NSDictionary *)GetInfoPhotoItem:(NSString *)aPhotoID andSecretPhoto:(NSString *)secretPhoto;
--(void)GetDataPhotoForCell:(int)indexRow;
--(BOOL)CheckConnectInternet;
-- (NSString*)convertDateStringMySetup:(NSString*)inputDateString;
+-(void)searchPhotosBySetUp;
+-(NSDictionary *)getResuilWithSearchingPhotos:(NSString *)aKeySearch;
+-(NSDictionary *)getInfomationPhotoById:(NSString *)aPhotoID secretPhoto:(NSString *)aSecretPhoto;
+-(void)loadCellAtIndex:(int)indexRow;
+-(BOOL)checkConnectWithInternet;
+- (NSString*)convertDateByString:(NSString*)aDateString;
 @end
