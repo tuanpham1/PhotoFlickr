@@ -39,19 +39,27 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    checkInternet = [[CheckConnectInternet alloc] init];
-    [checkInternet isConnectInternet];
-    searchBarPhoto.delegate = self;
-    [self setUpSearchBarWithImages];
+    
+    
     
     widthScreen = [UIScreen mainScreen].bounds.size.width;
     heightScreen = [UIScreen mainScreen].bounds.size.height;
-    
     self.view.frame = CGRectMake(0, 0, widthScreen, heightScreen);
     tableViewResuil.frame = CGRectMake(0, 60, widthScreen, heightScreen-60);
+    
+    checkInternet = [[CheckConnectInternet alloc] init];
+    mutableArrayResuilData = [[NSMutableArray alloc] init];
+    mutableArraySaveResuilData = [[NSMutableArray alloc] init];
+    mutableArraySaveDataCell = [[NSMutableArray alloc] init];
+    
+    tableViewResuil.hidden = YES;
+    
+    [checkInternet isConnectInternet];
+    [self setUpSearchBarWithImages];
     
     labelTitleApp = [[UILabel alloc] initWithFrame:CGRectMake(55, 15, 200, 20)];
     labelTitleApp.backgroundColor = [UIColor clearColor];
@@ -63,14 +71,7 @@
     imageViewSearchIcon = [[UIImageView alloc] initWithFrame:CGRectMake(20, 10, 25, 25)];
     imageViewSearchIcon.image = [UIImage imageNamed:@"icon-search.png"];
     [self.navigationController.navigationBar addSubview:imageViewSearchIcon];
-    mutableArrayResuilData = [[NSMutableArray alloc] init];
-    mutableArraySaveResuilData = [[NSMutableArray alloc] init];
-    mutableArraySaveDataCell = [[NSMutableArray alloc] init];
-    tableViewResuil.hidden = YES;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (changerSetUpNavigationBar:) name:@"PFNavigationBarDidChangerNotification" object:nil];
-    
-    
+
     imageViewBackGroudLoad = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, widthScreen, heightScreen)];
     [imageViewBackGroudLoad setUserInteractionEnabled:NO];
     imageViewBackGroudLoad.backgroundColor = [UIColor blackColor];
@@ -83,6 +84,8 @@
     activityIndicatorviewLoadingSearch.backgroundColor = [UIColor clearColor];
     [activityIndicatorviewLoadingSearch stopAnimating];
     [self.view addSubview:activityIndicatorviewLoadingSearch];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (changerSetUpNavigationBar:) name:@"PFNavigationBarDidChangerNotification" object:nil];
     
 }
 // Changer setup navigaion bar when back from detail screen
@@ -100,7 +103,7 @@
 #pragma mark Seach Function
 // changer interface search bar
 -(void)setUpSearchBarWithImages {
-    
+    searchBarPhoto.delegate = self;
     searchBarPhoto.autocorrectionType = UITextAutocorrectionTypeNo;
     searchBarPhoto.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-searchBar.png"]];
     labelNumberResuil.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-searchBar.png"]];
@@ -187,6 +190,7 @@
     NSDictionary *dictionaryPhotos = [dictionaryrsp objectForKey:@"photos"];
     NSDictionary *dictionaryPhoto = [dictionaryPhotos objectForKey:@"photo"];
     mutableArraySaveResuilData = [dictionaryPhoto mutableCopy];
+    
     if (mutableArraySaveResuilData.count > 0) {
         stopRun = NO;
         [self loadCellAtIndex:indexCellLoader];
@@ -242,6 +246,7 @@
         customCellTableView = nil;
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     if (mutableArraySaveDataCell.count > 0) {
         
         PFSearchModel *modelSearch = [mutableArraySaveDataCell objectAtIndex:indexPath.row];
@@ -258,6 +263,7 @@
             activityIndicatorviewLoadingSearch.frame = CGRectMake(130, widthScreen+50, 50, 50);
             dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             dispatch_async(queue, ^ {
+                
                     stopRun = NO;
                     indexCellLoader = indexPath.row+11;
                     [self loadCellAtIndex:indexCellLoader];
@@ -265,6 +271,7 @@
                     [tableViewResuil reloadData];
                     
                     activityIndicatorviewLoadingSearch.center = CGPointMake(widthScreen/2, heightScreen/2);
+                
             });
             dispatch_release(queue);
         }
@@ -277,7 +284,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([mutableArraySaveDataCell count] > 0) {
-        //stopRun = YES;
+        
         labelTitleApp.hidden = YES;
         searchBarPhoto.hidden = YES;
         imageViewSearchIcon.hidden = YES;
@@ -285,7 +292,6 @@
         NSDictionary *dictionaryPhotoCell = [mutableArraySaveDataCell mutableCopy];
         PFDetailPhotoViewController *detailPhotoViewController = [[[PFDetailPhotoViewController alloc] initWithNibName:@"PFDetailPhotoViewController" aDictionaryItem:dictionaryPhotoCell indexPath:indexPath.row] autorelease];
         [self.navigationController pushViewController:detailPhotoViewController animated:YES];
-        //[detailPhotoViewController release];
     }
     
 }

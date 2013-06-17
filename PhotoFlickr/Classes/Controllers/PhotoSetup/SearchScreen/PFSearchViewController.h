@@ -14,22 +14,26 @@
 
     IBOutlet UISearchBar *searchBarPhoto;
     IBOutlet UILabel *labelNumberResuil;
+    IBOutlet UITableView *tableViewResuil;
+    IBOutlet PFCustomViewCell *customCellTableView;
+    
     UILabel *labelTitleApp;
     UIImageView *imageViewSearchLogo;
     UIImageView *imageViewSearchIcon;
-    IBOutlet UITableView *tableViewResuil;
-    IBOutlet PFCustomViewCell *customCellTableView;
+    UIImageView *imageViewBackGroudLoad;
+    
     NSMutableArray *mutableArrayResuilData;
     NSMutableArray *mutableArraySaveResuilData;
     NSMutableArray *mutableArraySaveDataCell;
-    int indexCellLoader;
-    UIImageView *imageViewBackGroudLoad;
     UIActivityIndicatorView *activityIndicatorviewLoadingSearch;
+    
+    int indexCellLoader;
     float widthScreen;
     float heightScreen;
     BOOL stopRun;
     CheckConnectInternet *checkInternet;
 }
+
 -(void)setUpSearchBarWithImages;
 -(void)loadCellAtIndex:(int)indexRow;
 -(void)resuilPhotosWithSeachingKey:(NSString *)aKeySearch;

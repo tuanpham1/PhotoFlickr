@@ -14,6 +14,7 @@
 #import "SDImageCache.h"
 #import "PFSearchPhotoService.h"
 #import "PFCommentModel.h"
+
 @interface PFDetailPhotoViewController ()
 
 @end
@@ -32,6 +33,7 @@
     return self;
 }
 -(void)dealloc {
+    
     RELEASE_OBJECT(labelTitleImage);
     RELEASE_OBJECT(mutableArrayDetailPhoto);
     RELEASE_OBJECT(scrollViewAllDetail);
@@ -46,8 +48,8 @@
     self.view.frame = CGRectMake(0, 0, widthScreen, heightScreen);
     scrollViewAllDetail.frame = CGRectMake(0, 10, widthScreen, heightScreen);
     scrollViewAllDetail.contentSize = CGSizeMake(widthScreen, heightScreen);
-    indexScrollPage = 0;
     
+    indexScrollPage = 0;
     scrollViewAllDetail.pagingEnabled = YES;
     scrollViewAllDetail.scrollEnabled = YES;
     
@@ -70,6 +72,7 @@
     PFSearchModel *modelSearch0  = [mutableArrayDetailPhoto objectAtIndex:0];
     labelTitleImage.text = modelSearch0._stringTitlePhoto;
     [self loadDetailWithPhoto:modelSearch0 OriginX:0];
+    
     indexPageLoader = 1;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^ {
@@ -80,13 +83,18 @@
     dispatch_release(queue);
 }
 
+// Action back search screen
 -(IBAction)backScreenBySearch:(id)sender{
+    
     labelTitleImage.hidden = YES;
     UIButton *buttonBack = (UIButton *)sender;
     buttonBack.frame = CGRectMake(0, 0, 0, 0);
     [self.navigationController popToRootViewControllerAnimated:YES];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"PFNavigationBarDidChangerNotification" object:nil];
+    
 }
+
+// Action move detail screen photo 
 -(IBAction)moveScreenWithDetailingPhoto:(id)sender {
 
     //labelTitleImage.text = @"Detail Images";
@@ -96,7 +104,10 @@
     PFImageDetailViewController *imageDetailViewController = [[PFImageDetailViewController alloc] initWithNibName:@"PFImageDetailViewController" aNameImage:stringUrlPhoto1024];
     [self.navigationController pushViewController:imageDetailViewController animated:YES];
     RELEASE_OBJECT(imageDetailViewController);
+    
 }
+
+// load infomation detail photo
 -(void)loadDetailWithPhoto:(PFSearchModel *)aModelSearch OriginX:(float)indexOriginX {
     
     PFDetailPhotoViewItem *detailPhotoItem = [[PFDetailPhotoViewItem alloc] init];
@@ -129,14 +140,18 @@
         
         NSDictionary *dictionaryCommentPhotoComment = [dictionaryCommentPhoto objectForKey:@"comment"];
         if (dictionaryCommentPhotoComment.count != 8 && dictionaryCommentPhotoComment.count > 0) {
+            
             NSMutableArray *mutableArrayCommentPhoto = [[NSMutableArray alloc] init];
+            
             for (NSDictionary *dictionaryItem in dictionaryCommentPhotoComment) {
                 PFCommentModel *modelComment = [[PFCommentModel alloc] initWithData:dictionaryItem];
                 [mutableArrayCommentPhoto addObject:modelComment];
                 RELEASE_OBJECT(modelComment);
             }
+            
             detailPhotoItem._labelTitleComment.text = [NSString stringWithFormat:@"Comment for this photo: %i comments",mutableArrayCommentPhoto.count];
             [self loadDataWithCommentingPhoto:detailPhotoItem._scrollViewComment arrayComment:mutableArrayCommentPhoto];
+            
             RELEASE_OBJECT(mutableArrayCommentPhoto);
         }
     }
@@ -147,8 +162,11 @@
     
     RELEASE_OBJECT(detailPhotoItem);
 }
+
+// load data comment photo
 -(void)loadDataWithCommentingPhoto:(UIScrollView *)aScrollView  arrayComment:(NSMutableArray *) aArrayComment {
     float indexFrameYView = 10;
+    
     for (PFCommentModel *modelComment in aArrayComment) {
         
         NSInteger length = [[modelComment._stringTextComment componentsSeparatedByCharactersInSet:
@@ -172,7 +190,9 @@
     
 }
 
+// load next page scroll
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
+    
     if (sender == scrollViewAllDetail) {
         int pageNum = (int)(scrollViewAllDetail.contentOffset.x / scrollViewAllDetail.frame.size.width);
         indexScrollPage = pageNum;
@@ -187,14 +207,19 @@
            
         }
     }
+    
 }
+
+// load infomation body for next page
 -(void)loadScrollWithNextingPage:(NSString *)indexPage {
+    
     int pageNum = [indexPage intValue];
         if (pageNum < mutableArrayDetailPhoto.count) {
             float indexOriginX = (pageNum*widthScreen);
             PFSearchModel *modelSearch  = [mutableArrayDetailPhoto objectAtIndex:pageNum];
             [self loadDetailWithPhoto:modelSearch OriginX:indexOriginX];
     }
+    
 }
 - (void)didReceiveMemoryWarning
 {

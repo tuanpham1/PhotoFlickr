@@ -108,6 +108,7 @@
     _labelTitleComment.backgroundColor = [UIColor clearColor];
     _labelTitleComment.textColor = [UIColor darkGrayColor];
     [_scrollViewItem addSubview:_labelTitleComment];
+    
 }
 -(void)dealloc {
     

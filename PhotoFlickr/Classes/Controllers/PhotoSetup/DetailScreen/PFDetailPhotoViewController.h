@@ -14,14 +14,17 @@
 @interface PFDetailPhotoViewController : UIViewController
 {
     IBOutlet UIScrollView *scrollViewAllDetail;
+    
     UILabel *labelTitleImage;
     NSMutableArray *mutableArrayDetailPhoto;
+    
     int indexScrollPage;
     int indexPageLoader;
     float widthScreen;
     float heightScreen;
     BOOL stopRuning;
 }
+
 - (id)initWithNibName:(NSString *)nibNameOrNil aDictionaryItem:(NSDictionary *)dictionaryItem indexPath:(int)indexPath;
 -(void)loadDetailWithPhoto:(PFSearchModel *)aModelSearch OriginX:(float)indexOriginX;
 -(void)loadDataWithCommentingPhoto:(UIScrollView *)aScrollView  arrayComment:(NSMutableArray *) aArrayComment;

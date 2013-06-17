@@ -24,7 +24,9 @@
     UILabel *_labelTitleDescription;
     UILabel *_labelTitleComment;
     NSMutableArray *_mutableArrayComment;
+    
 }
+
 @property(nonatomic, strong) UIScrollView *_scrollViewItem;
 @property(nonatomic, strong) UIScrollView *_scrollViewComment;
 @property(nonatomic, strong) UIImageView *_imageViewAvatarUser;

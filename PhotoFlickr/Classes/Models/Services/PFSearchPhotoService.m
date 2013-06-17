@@ -21,7 +21,7 @@
     }
     return self;
 }
-//search photo with key search
+// search photo with key search
 -(NSDictionary *)searchPhotosWithTextingKey:(NSString *)aKeySearch {
     
     NSString *require = [[NSString alloc] initWithString:[NSString stringWithFormat:@"method=flickr.photos.search&api_key=%@&text=%@",PF_API_KEY,aKeySearch]];
@@ -45,7 +45,7 @@
     return xmlDictionary;
     
 }
-//Get info photo with photoID
+// Get info photo with photoID
 -(NSDictionary *)getInfomationPhotoById:(NSString *)aPhotoID secretPhoto:(NSString *)aSecretPhoto {
     
     NSString *require = [[NSString alloc] initWithString:[NSString stringWithFormat:@"method=flickr.photos.getInfo&api_key=%@&photo_id=%@&secret=%@",PF_API_KEY,aPhotoID,aSecretPhoto]];
