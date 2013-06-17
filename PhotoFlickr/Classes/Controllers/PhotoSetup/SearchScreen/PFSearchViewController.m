@@ -8,11 +8,11 @@
 
 #import "PFSearchViewController.h"
 #import "PFDetailPhotoViewController.h"
-#import "XMLReader.h"
 #import "MacroSandbox.h"
 #import "UIImageView+WebCache.h"
 #import "SDImageCache.h"
-#import "SearchModel.h"
+#import "PFSearchModel.h"
+#import "PFSearchPhotoService.h"
 @implementation PFSearchViewController
 
 
@@ -25,6 +25,7 @@
     return self;
 }
 -(void)dealloc {
+    RELEASE_OBJECT(checkInternet);
     RELEASE_OBJECT(mutableArraySaveDataCell);
     RELEASE_OBJECT(searchBarPhoto);
     RELEASE_OBJECT(imageViewSearchLogo);
@@ -41,9 +42,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self checkConnectWithInternet];
+    checkInternet = [[CheckConnectInternet alloc] init];
+    [checkInternet isConnectInternet];
     searchBarPhoto.delegate = self;
-    [self searchPhotosBySetUp];
+    [self setUpSearchBarWithImages];
     
     widthScreen = [UIScreen mainScreen].bounds.size.width;
     heightScreen = [UIScreen mainScreen].bounds.size.height;
@@ -66,7 +68,7 @@
     mutableArraySaveDataCell = [[NSMutableArray alloc] init];
     tableViewResuil.hidden = YES;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (changerSetUpNavigationBar:) name:@"ChangerNavigationBar" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (changerSetUpNavigationBar:) name:@"PFNavigationBarDidChangerNotification" object:nil];
     
     
     imageViewBackGroudLoad = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, widthScreen, heightScreen)];
@@ -83,30 +85,7 @@
     [self.view addSubview:activityIndicatorviewLoadingSearch];
     
 }
-////========================Check connect internet
--(BOOL)checkConnectWithInternet {
-    
-    BOOL connect = YES;
-    Reachability *reachability = [Reachability reachabilityForInternetConnection];
-    NetworkStatus internetStatus = [reachability currentReachabilityStatus];
-    
-    if(internetStatus == NotReachable) {
-        connect = NO;
-        UIAlertView *errorView;
-        
-        errorView = [[UIAlertView alloc]
-                     initWithTitle:@""
-                     message:@"Không thể kết nối internet"
-                     delegate: self
-                     cancelButtonTitle: @"OK" otherButtonTitles: nil,nil];
-        
-        [errorView show];
-        [errorView autorelease];
-    }
-    
-    return connect;
-}
-
+// Changer setup navigaion bar when back from detail screen
 -(IBAction)changerSetUpNavigationBar:(id)sender {
 
     labelTitleApp.hidden = NO;
@@ -117,56 +96,10 @@
     [searchBarPhoto resignFirstResponder];
     [tableViewResuil reloadData];
 }
-//Fine Photo Akey search
--(NSDictionary *)getResuilWithSearchingPhotos:(NSString *)aKeySearch {
 
-    NSString *require = [[NSString alloc] initWithString:[NSString stringWithFormat:@"method=flickr.photos.search&api_key=%@&text=%@",PF_API_KEY,aKeySearch]];
-    NSURL *url=[NSURL URLWithString:[NSString stringWithFormat:@"%@",PF_URL_SERVER]];
-    
-    NSData *postData = [require dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:url];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
-    NSError *error;
-    NSURLResponse *response;
-    NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    NSError *parseError = nil;
-    NSDictionary *xmlDictionary = [XMLReader dictionaryForXMLData:urlData error:&parseError];
-    RELEASE_OBJECT(require);
-    RELEASE_OBJECT(request);
-    return xmlDictionary;
-
-}
-//Fine A Photo Info
--(NSDictionary *)getInfomationPhotoById:(NSString *)aPhotoID secretPhoto:(NSString *)aSecretPhoto {
-    
-    NSString *require = [[NSString alloc] initWithString:[NSString stringWithFormat:@"method=flickr.photos.getInfo&api_key=%@&photo_id=%@&secret=%@",PF_API_KEY,aPhotoID,aSecretPhoto]];
-    NSURL *url=[NSURL URLWithString:[NSString stringWithFormat:@"%@",PF_URL_SERVER]];
-    
-    NSData *postData = [require dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:url];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
-    NSError *error;
-    NSURLResponse *response;
-    NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    NSError *parseError = nil;
-    NSDictionary *xmlDictionary = [XMLReader dictionaryForXMLData:urlData error:&parseError];
-    RELEASE_OBJECT(require);
-    RELEASE_OBJECT(request);
-    return xmlDictionary;
-    
-}
 #pragma mark Seach Function
--(void)searchPhotosBySetUp {
+// changer interface search bar
+-(void)setUpSearchBarWithImages {
     
     searchBarPhoto.autocorrectionType = UITextAutocorrectionTypeNo;
     searchBarPhoto.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-searchBar.png"]];
@@ -215,7 +148,7 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];
 	[searchBar setShowsCancelButton:NO animated:YES];
-    [self checkConnectWithInternet];
+    [checkInternet isConnectInternet];
     imageViewBackGroudLoad.alpha = 0.3;
     [imageViewBackGroudLoad setUserInteractionEnabled:YES];
     [activityIndicatorviewLoadingSearch startAnimating];
@@ -230,27 +163,7 @@
             indexCellLoader = 10;
             [mutableArraySaveDataCell removeAllObjects];
             [mutableArraySaveResuilData removeAllObjects];
-            NSDictionary *dictionaryResuilSearch = [self getResuilWithSearchingPhotos:searchBar.text];
-            NSDictionary *dictionaryrsp = [dictionaryResuilSearch objectForKey:@"rsp"];
-            NSDictionary *dictionaryPhotos = [dictionaryrsp objectForKey:@"photos"];
-            NSDictionary *dictionaryPhoto = [dictionaryPhotos objectForKey:@"photo"];
-            int i = 0;
-            for (NSDictionary *dictionaryPhotoItem in dictionaryPhoto) {
-                i++;
-                [mutableArraySaveResuilData addObject:dictionaryPhotoItem];
-            }
-            if (mutableArraySaveResuilData.count > 0) {
-                stopRun = NO;
-                [self loadCellAtIndex:indexCellLoader];
-                labelNumberResuil.text = [NSString stringWithFormat:@"    Results found: %i photos",i];
-                tableViewResuil.hidden = NO;
-                [tableViewResuil reloadData];
-                
-            } else {
-                
-                labelNumberResuil.text = @"Not fine resuil!";
-            }
-            
+            [self resuilPhotosWithSeachingKey:searchBar.text];
             
         }else {
             
@@ -264,6 +177,30 @@
 	[searchBar resignFirstResponder];
 	[searchBar setShowsCancelButton:NO animated:YES];
 }
+#pragma mark Resuil Search
+// Resul photos with search key
+-(void)resuilPhotosWithSeachingKey:(NSString *)aKeySearch {
+    PFSearchPhotoService *searchPhotoService = [[PFSearchPhotoService alloc] init];
+    
+    NSDictionary *dictionaryDataPhotos = [searchPhotoService searchPhotosWithTextingKey:aKeySearch];
+    NSDictionary *dictionaryrsp = [dictionaryDataPhotos objectForKey:@"rsp"];
+    NSDictionary *dictionaryPhotos = [dictionaryrsp objectForKey:@"photos"];
+    NSDictionary *dictionaryPhoto = [dictionaryPhotos objectForKey:@"photo"];
+    mutableArraySaveResuilData = [dictionaryPhoto mutableCopy];
+    if (mutableArraySaveResuilData.count > 0) {
+        stopRun = NO;
+        [self loadCellAtIndex:indexCellLoader];
+        labelNumberResuil.text = [NSString stringWithFormat:@"    Results found: %i photos",mutableArraySaveResuilData.count];
+        tableViewResuil.hidden = NO;
+        [tableViewResuil reloadData];
+        
+    } else {
+        
+        labelNumberResuil.text = @"     Not fine resuil!";
+    }
+    RELEASE_OBJECT(searchPhotoService);
+}
+// load 10 row for table view
 -(void)loadCellAtIndex:(int)indexRow {
 
     if(mutableArraySaveDataCell.count < indexRow)
@@ -275,65 +212,12 @@
                     return;
                 }
                 NSDictionary *dictionaryPhotoItem = [mutableArraySaveResuilData objectAtIndex:i];
-                NSString *stringPhotoID = [dictionaryPhotoItem objectForKey:@"id"];
-                NSString *stringSecret = [dictionaryPhotoItem objectForKey:@"secret"];
-                
-                NSDictionary *dictionaryPhotoInfo = [self getInfomationPhotoById:stringPhotoID secretPhoto:stringSecret];
-                
-                NSDictionary *dictionaryPhotoInfoRsp = [dictionaryPhotoInfo objectForKey:@"rsp"];
-                NSDictionary *dictionaryPhotoInfoPhoto = [dictionaryPhotoInfoRsp objectForKey:@"photo"];
-                NSDictionary *dictionaryPhotoInfoOwner = [dictionaryPhotoInfoPhoto objectForKey:@"owner"];
-                NSDictionary *dictionaryPhotoInfoDates = [dictionaryPhotoInfoPhoto objectForKey:@"dates"];
-                NSDictionary *dictionaryPhotoInfoTitle = [dictionaryPhotoInfoPhoto objectForKey:@"title"];
-                NSDictionary *dictionaryPhotoInfoDescription = [dictionaryPhotoInfoPhoto objectForKey:@"description"];
-                
-                //get info user(username, location, url Image)
-                
-                NSString *stringIconFarm = [dictionaryPhotoInfoOwner objectForKey:@"iconfarm"];
-                NSString *stringIconServer = [dictionaryPhotoInfoOwner objectForKey:@"iconserver"];
-                NSString *stringIdUser = [dictionaryPhotoInfoOwner objectForKey:@"nsid"];
-                NSDictionary *dictionaryPhotoInfoFarm = [dictionaryPhotoInfoPhoto objectForKey:@"farm"];
-                NSDictionary *dictionaryPhotoInfoServerId = [dictionaryPhotoInfoPhoto objectForKey:@"server"];
-                NSDictionary *dictionaryPhotoInfoId = [dictionaryPhotoInfoPhoto objectForKey:@"id"];
-                NSDictionary *dictionaryPhotoInfoSecret = [dictionaryPhotoInfoPhoto objectForKey:@"secret"];
-                
-                NSString *stringDatePhotoUpload = [dictionaryPhotoInfoDates objectForKey:@"taken"];
-                stringDatePhotoUpload = [self convertDateByString:stringDatePhotoUpload];
-                NSString *stringUrlIConUser = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/buddyicons/%@.jpg",stringIconFarm,stringIconServer,stringIdUser];
-                NSString *stringUrlPhotoSize150 = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@_q.jpg",dictionaryPhotoInfoFarm,dictionaryPhotoInfoServerId,dictionaryPhotoInfoId,dictionaryPhotoInfoSecret];
-                NSString *stringUrlPhotoSize240 = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@_m.jpg",dictionaryPhotoInfoFarm,dictionaryPhotoInfoServerId,dictionaryPhotoInfoId,dictionaryPhotoInfoSecret];
-                NSString *stringUrlPhotoSize1024 = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@_b.jpg",dictionaryPhotoInfoFarm,dictionaryPhotoInfoServerId,dictionaryPhotoInfoId,dictionaryPhotoInfoSecret];
-                
-                SearchModel *modelSearch = [[SearchModel alloc] init];
-                modelSearch._stringPhotoID = stringPhotoID;
-                modelSearch._stringTitlePhoto = [dictionaryPhotoInfoTitle objectForKey:@"text"];
-                modelSearch._stringNameUser = [dictionaryPhotoInfoOwner objectForKey:@"username"];
-                modelSearch._stringRealNameUser = [dictionaryPhotoInfoOwner objectForKey:@"realname"];
-                modelSearch._stringLocationUser = [dictionaryPhotoInfoOwner objectForKey:@"location"];
-                modelSearch._stringDatePhotoUpload = stringDatePhotoUpload;
-                modelSearch._stringViewCountPhoto = [NSString stringWithFormat:@"Views: %@",[dictionaryPhotoInfoPhoto objectForKey:@"views"]];
-                modelSearch._stringDescriptionPhoto = [dictionaryPhotoInfoDescription objectForKey:@"text"];
-                modelSearch._stringUrlIConUser = stringUrlIConUser;
-                
-                modelSearch._stringUrlPhotoSize150 = stringUrlPhotoSize150;
-                modelSearch._stringUrlPhotoSize240 = stringUrlPhotoSize240;
-                modelSearch._stringUrlPhotoSize1024 = stringUrlPhotoSize1024;
-                
-                
+                PFSearchModel *modelSearch = [[PFSearchModel alloc] initWithData:dictionaryPhotoItem];
                 [mutableArraySaveDataCell addObject:modelSearch];
-                
                 RELEASE_OBJECT(modelSearch);
             }
         }
     }
-}
-- (NSString*)convertDateByString:(NSString*)aDateString {
-    NSString *trimmedString = [aDateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate *date1 = [dateFormatter dateFromString:trimmedString];
-    [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
-    return [dateFormatter stringFromDate:date1];
 }
 #pragma mark Table Function
 // table view resuil data
@@ -349,20 +233,18 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-    static NSString *CellIdentifier = @"PKCustomCellViewController";
+    static NSString *CellIdentifier = @"PFCustomViewCell";
 	
-    PKCustomCellViewController *cell = (PKCustomCellViewController*) [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    PFCustomViewCell *cell = (PFCustomViewCell*) [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        [[NSBundle mainBundle] loadNibNamed:@"PKCustomCellViewController" owner:self options:nil];
+        [[NSBundle mainBundle] loadNibNamed:@"PFCustomViewCell" owner:self options:nil];
         cell = customCellTableView;
         customCellTableView = nil;
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if (mutableArraySaveDataCell.count > 0) {
         
-        SearchModel *modelSearch = [mutableArraySaveDataCell objectAtIndex:indexPath.row];
-        
-        //load date for cell
+        PFSearchModel *modelSearch = [mutableArraySaveDataCell objectAtIndex:indexPath.row];
         [cell.imageViewAvatar setImageWithURL:[NSURL URLWithString:modelSearch._stringUrlIConUser]];
         cell.labelNameUser.text = modelSearch._stringNameUser;
         cell.labelLocationUser.text = modelSearch._stringLocationUser;
@@ -401,9 +283,9 @@
         imageViewSearchIcon.hidden = YES;
         [searchBarPhoto resignFirstResponder];
         NSDictionary *dictionaryPhotoCell = [mutableArraySaveDataCell mutableCopy];
-        PFDetailPhotoViewController *detailPhotoViewController = [[PFDetailPhotoViewController alloc] initWithNibName:@"PFDetailPhotoViewController" aDictionaryItem:dictionaryPhotoCell indexPath:indexPath.row];
+        PFDetailPhotoViewController *detailPhotoViewController = [[[PFDetailPhotoViewController alloc] initWithNibName:@"PFDetailPhotoViewController" aDictionaryItem:dictionaryPhotoCell indexPath:indexPath.row] autorelease];
         [self.navigationController pushViewController:detailPhotoViewController animated:YES];
-        RELEASE_OBJECT(detailPhotoViewController);
+        //[detailPhotoViewController release];
     }
     
 }

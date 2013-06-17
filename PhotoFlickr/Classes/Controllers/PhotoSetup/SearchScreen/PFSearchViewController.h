@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PKCustomCellViewController.h"
-#import "Reachability.h"
-@interface PFSearchViewController : UIViewController <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate>
+#import "PFCustomViewCell.h"
+#import "CheckConnectInternet.h"
+@interface PFSearchViewController : UIViewController <UISearchBarDelegate>
 {
 
     IBOutlet UISearchBar *searchBarPhoto;
@@ -18,7 +18,7 @@
     UIImageView *imageViewSearchLogo;
     UIImageView *imageViewSearchIcon;
     IBOutlet UITableView *tableViewResuil;
-    IBOutlet PKCustomCellViewController *customCellTableView;
+    IBOutlet PFCustomViewCell *customCellTableView;
     NSMutableArray *mutableArrayResuilData;
     NSMutableArray *mutableArraySaveResuilData;
     NSMutableArray *mutableArraySaveDataCell;
@@ -28,11 +28,10 @@
     float widthScreen;
     float heightScreen;
     BOOL stopRun;
+    CheckConnectInternet *checkInternet;
 }
--(void)searchPhotosBySetUp;
--(NSDictionary *)getResuilWithSearchingPhotos:(NSString *)aKeySearch;
--(NSDictionary *)getInfomationPhotoById:(NSString *)aPhotoID secretPhoto:(NSString *)aSecretPhoto;
+-(void)setUpSearchBarWithImages;
 -(void)loadCellAtIndex:(int)indexRow;
--(BOOL)checkConnectWithInternet;
-- (NSString*)convertDateByString:(NSString*)aDateString;
+-(void)resuilPhotosWithSeachingKey:(NSString *)aKeySearch;
+
 @end

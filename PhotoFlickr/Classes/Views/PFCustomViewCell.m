@@ -1,16 +1,15 @@
 //
-//  PKCustomCellViewController.m
+//  PFCustomViewCell.m
 //  PhotoFlickr
 //
-//  Created by cncsoft on 6/5/13.
+//  Created by cncsoft on 6/17/13.
 //  Copyright (c) 2013 cncsoft. All rights reserved.
 //
+
+#import "PFCustomViewCell.h"
 #import "MacroSandbox.h"
-#import "PKCustomCellViewController.h"
 
-
-
-@implementation PKCustomCellViewController
+@implementation PFCustomViewCell
 
 @synthesize imageViewAvatar,imageViewDescription,labelNameUser,labelLocationUser,labelCountView,labelDateUpload;
 
@@ -23,4 +22,5 @@
     RELEASE_OBJECT(labelCountView);
     [super dealloc];
 }
+
 @end

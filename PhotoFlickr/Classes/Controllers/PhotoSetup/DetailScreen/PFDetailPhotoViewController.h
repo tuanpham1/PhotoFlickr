@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SearchModel.h"
-#import "DetailPhotoModel.h"
-#import "CommentPhotoModel.h"
+#import "PFDetailPhotoViewItem.h"
+#import "PFCommentPhotoViewItem.h"
+#import "PFSearchModel.h"
 
 @interface PFDetailPhotoViewController : UIViewController
 {
@@ -23,7 +23,6 @@
     BOOL stopRuning;
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil aDictionaryItem:(NSDictionary *)dictionaryItem indexPath:(int)indexPath;
--(NSDictionary *)getCommentsPhotoById:(NSString *)aPhotoId;
--(void)loadDetailWithPhoto:(SearchModel *)aModelSearch OriginX:(float)indexOriginX;
--(void)loadDataWithCommentingPhoto:(UIScrollView *)aScrollView  dictionaryComment:(NSDictionary *) aDictionaryComment;
+-(void)loadDetailWithPhoto:(PFSearchModel *)aModelSearch OriginX:(float)indexOriginX;
+-(void)loadDataWithCommentingPhoto:(UIScrollView *)aScrollView  arrayComment:(NSMutableArray *) aArrayComment;
 @end

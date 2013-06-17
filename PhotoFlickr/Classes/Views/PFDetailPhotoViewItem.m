@@ -1,16 +1,15 @@
 //
-//  DetailPhotoModel.m
+//  PFDetailPhotoViewItem.m
 //  PhotoFlickr
 //
-//  Created by cncsoft on 6/14/13.
+//  Created by cncsoft on 6/17/13.
 //  Copyright (c) 2013 cncsoft. All rights reserved.
 //
 
-#import "DetailPhotoModel.h"
+#import "PFDetailPhotoViewItem.h"
 #import "QuartzCore/QuartzCore.h"
 
-@implementation DetailPhotoModel
-
+@implementation PFDetailPhotoViewItem
 @synthesize _scrollViewItem;
 @synthesize _scrollViewComment;
 @synthesize _imageViewAvatarUser;
@@ -26,7 +25,7 @@
 @synthesize _mutableArrayComment;
 
 -(id) init {
-
+    
     self = [super init];
     if (self) {
         
@@ -35,12 +34,12 @@
     return self;
 }
 -(void)creatScreenWithUIkit {
-
+    
     _mutableArrayComment = [[NSMutableArray alloc] init];
     _scrollViewItem = [[UIScrollView alloc] init];
     [_scrollViewItem setUserInteractionEnabled:YES];
     
-     //Scroll View Coment
+    //Scroll View Coment
     _scrollViewComment = [[UIScrollView alloc] initWithFrame:CGRectMake(5, 420, 307, 199)];
     _scrollViewComment.layer.borderWidth = 1.0;
     _scrollViewComment.layer.borderColor = [[UIColor grayColor] CGColor];
@@ -129,5 +128,4 @@
     
     [super dealloc];
 }
-
 @end

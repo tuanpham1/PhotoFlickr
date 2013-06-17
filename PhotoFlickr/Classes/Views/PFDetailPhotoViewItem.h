@@ -1,16 +1,16 @@
 //
-//  DetailPhotoModel.h
+//  PFDetailPhotoViewItem.h
 //  PhotoFlickr
 //
-//  Created by cncsoft on 6/14/13.
+//  Created by cncsoft on 6/17/13.
 //  Copyright (c) 2013 cncsoft. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-@interface DetailPhotoModel : NSObject
+@interface PFDetailPhotoViewItem : NSObject
 {
-
+    
     UIScrollView *_scrollViewItem;
     UIScrollView *_scrollViewComment;
     UIImageView *_imageViewAvatarUser;
@@ -40,5 +40,4 @@
 @property(nonatomic, strong) NSMutableArray *_mutableArrayComment;
 
 -(void)creatScreenWithUIkit;
-
 @end

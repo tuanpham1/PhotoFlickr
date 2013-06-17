@@ -1,16 +1,16 @@
 //
-//  PKCustomCellViewController.h
+//  PFCustomViewCell.h
 //  PhotoFlickr
 //
-//  Created by cncsoft on 6/5/13.
+//  Created by cncsoft on 6/17/13.
 //  Copyright (c) 2013 cncsoft. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface PKCustomCellViewController : UITableViewCell
+@interface PFCustomViewCell : UITableViewCell
 {
-
+    
     IBOutlet UIImageView *imageViewAvatar;
     IBOutlet UIImageView *imageViewDescription;
     IBOutlet UILabel *labelNameUser;
@@ -25,4 +25,5 @@
 @property(nonatomic,retain) IBOutlet UILabel *labelLocationUser;
 @property(nonatomic,retain) IBOutlet UILabel *labelDateUpload;
 @property(nonatomic,retain) IBOutlet UILabel *labelCountView;
+
 @end

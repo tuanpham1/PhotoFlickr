@@ -1,14 +1,14 @@
 //
-//  CommentPhotoModel.m
+//  PFCommentPhotoViewItem.m
 //  PhotoFlickr
 //
-//  Created by cncsoft on 6/14/13.
+//  Created by cncsoft on 6/17/13.
 //  Copyright (c) 2013 cncsoft. All rights reserved.
 //
 
-#import "CommentPhotoModel.h"
+#import "PFCommentPhotoViewItem.h"
 
-@implementation CommentPhotoModel
+@implementation PFCommentPhotoViewItem
 
 @synthesize _viewItemComment;
 @synthesize _labelNameUserComment;
@@ -16,7 +16,7 @@
 @synthesize _imageViewAvatarComment;
 
 -(id)init {
-
+    
     self = [super init];
     if (self) {
         
