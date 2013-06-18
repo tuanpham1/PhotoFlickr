@@ -56,6 +56,7 @@
         NSString *stringUrlPhotoSize150 = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@_q.jpg",dictionaryPhotoInfoFarm,dictionaryPhotoInfoServerId,dictionaryPhotoInfoId,dictionaryPhotoInfoSecret];
         NSString *stringUrlPhotoSize240 = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@_m.jpg",dictionaryPhotoInfoFarm,dictionaryPhotoInfoServerId,dictionaryPhotoInfoId,dictionaryPhotoInfoSecret];
         NSString *stringUrlPhotoSize1024 = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@_b.jpg",dictionaryPhotoInfoFarm,dictionaryPhotoInfoServerId,dictionaryPhotoInfoId,dictionaryPhotoInfoSecret];
+        stringDatePhotoUpload = [self convertDateStringMySetup:stringDatePhotoUpload];
         
         
         self._stringPhotoID = stringPhotoID;
@@ -72,6 +73,15 @@
         self._stringUrlPhotoSize1024 = stringUrlPhotoSize1024;
     }
     return self;
+}
+- (NSString*)convertDateStringMySetup:(NSString*)inputDateString{
+    NSString *trimmedString = [inputDateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    //    NSString *string1=[inputDateString stringByAppendingString:@" 00:00:00 +0000"];
+    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate *date1 = [dateFormatter dateFromString:trimmedString];
+    [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
+    return [dateFormatter stringFromDate:date1];
 }
 -(void)dealloc
 {

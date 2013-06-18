@@ -10,7 +10,6 @@
 
 @interface PFCommentPhotoViewItem : UIView
 {
-    UIView *_viewItemComment;
     UIImageView *_imageViewAvatarComment;
     UILabel *_labelNameUserComment;
     UILabel *_labelBodyComment;
@@ -18,7 +17,6 @@
     
 }
 
-@property(nonatomic,strong) UIView *_viewItemComment;
 @property(nonatomic,strong) UIImageView *_imageViewAvatarComment;
 @property(nonatomic,strong) UILabel *_labelNameUserComment;
 @property(nonatomic,strong) UILabel *_labelBodyComment;

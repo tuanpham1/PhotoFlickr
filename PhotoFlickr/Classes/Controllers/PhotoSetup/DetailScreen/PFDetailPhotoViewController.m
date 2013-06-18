@@ -110,10 +110,10 @@
 // load infomation detail photo
 -(void)loadDetailWithPhoto:(PFSearchModel *)aModelSearch OriginX:(float)indexOriginX {
     
-    PFDetailPhotoViewItem *detailPhotoItem = [[PFDetailPhotoViewItem alloc] init];
-    detailPhotoItem._scrollViewItem.frame = CGRectMake(indexOriginX, 0, widthScreen, heightScreen-50);
-    detailPhotoItem._scrollViewItem.contentSize = CGSizeMake(widthScreen, 650);
-    [scrollViewAllDetail addSubview:detailPhotoItem._scrollViewItem];
+    PFDetailPhotoViewItem *detailPhotoItem = [[PFDetailPhotoViewItem alloc] initWithFrame:CGRectMake(indexOriginX, 0, widthScreen, heightScreen-50)];
+    
+    detailPhotoItem.contentSize = CGSizeMake(widthScreen, 650);
+    [scrollViewAllDetail addSubview:detailPhotoItem];
     
     //Text View Description
     int indexLine = ceilf(aModelSearch._stringDescriptionPhoto.length/46.0);
@@ -174,9 +174,9 @@
         int indexLine = length;
         float indexFrameYComment = indexLine*13;
         
-        PFCommentPhotoViewItem *commentPhotoItem = [[PFCommentPhotoViewItem alloc] init];
-        commentPhotoItem._viewItemComment.frame = CGRectMake(0, indexFrameYView, widthScreen, 40*indexFrameYComment);
-        [aScrollView addSubview:commentPhotoItem._viewItemComment];
+        PFCommentPhotoViewItem *commentPhotoItem = [[PFCommentPhotoViewItem alloc] initWithFrame:CGRectMake(0, indexFrameYView, widthScreen, 40*indexFrameYComment)];
+        [aScrollView addSubview:commentPhotoItem];
+        
         commentPhotoItem._labelBodyComment.frame = CGRectMake(35, 20, 270, indexFrameYComment);
         
         //load data comment

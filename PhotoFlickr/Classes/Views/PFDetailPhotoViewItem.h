@@ -8,10 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PFDetailPhotoViewItem : UIView
+@interface PFDetailPhotoViewItem : UIScrollView
 {
-    
-    UIScrollView *_scrollViewItem;
     UIScrollView *_scrollViewComment;
     UIImageView *_imageViewAvatarUser;
     UIImageView *_imageViewDetail;
@@ -23,11 +21,9 @@
     UIScrollView *_scrollViewDescription;
     UILabel *_labelTitleDescription;
     UILabel *_labelTitleComment;
-    NSMutableArray *_mutableArrayComment;
     
 }
 
-@property(nonatomic, strong) UIScrollView *_scrollViewItem;
 @property(nonatomic, strong) UIScrollView *_scrollViewComment;
 @property(nonatomic, strong) UIImageView *_imageViewAvatarUser;
 @property(nonatomic, strong) UIImageView *_imageViewDetail;
@@ -39,7 +35,5 @@
 @property(nonatomic, strong) UIScrollView *_scrollViewDescription;
 @property(nonatomic, strong) UILabel *_labelTitleDescription;
 @property(nonatomic, strong) UILabel *_labelTitleComment;
-@property(nonatomic, strong) NSMutableArray *_mutableArrayComment;
 
--(void)creatScreenWithUIkit;
 @end

@@ -39,4 +39,6 @@
 @property(nonatomic,retain)  NSString *_stringViewCountPhoto;
 
 -(id)initWithData:(NSDictionary *)aPhotoData;
+- (NSString*)convertDateStringMySetup:(NSString*)inputDateString;
+
 @end
