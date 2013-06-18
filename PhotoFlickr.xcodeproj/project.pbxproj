@@ -22,6 +22,7 @@
 		8C184B2A176F081E00E3444B /* CheckConnectInternet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C184B29176F081E00E3444B /* CheckConnectInternet.m */; };
 		8C184B3D176F0F9900E3444B /* PFCustomViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C184B3B176F0F9900E3444B /* PFCustomViewCell.m */; };
 		8C184B3E176F0F9900E3444B /* PFCustomViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C184B3C176F0F9900E3444B /* PFCustomViewCell.xib */; };
+		8C27093D17700F3D00075709 /* icon-app.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C27093C17700F3D00075709 /* icon-app.png */; };
 		8C874D5A176188110033ECBB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C874D59176188110033ECBB /* UIKit.framework */; };
 		8C874D5C176188110033ECBB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C874D5B176188110033ECBB /* Foundation.framework */; };
 		8C874D5E176188110033ECBB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C874D5D176188110033ECBB /* CoreGraphics.framework */; };
@@ -40,7 +41,6 @@
 		8C874DEA17618C700033ECBB /* UIButton+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C874DE017618C700033ECBB /* UIButton+WebCache.m */; };
 		8C874DEB17618C700033ECBB /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C874DE217618C700033ECBB /* UIImageView+WebCache.m */; };
 		8C874E421761D40C0033ECBB /* XMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C874E411761D40C0033ECBB /* XMLReader.m */; };
-		8CDFC1D3176B2A1100601B5A /* icon-app.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CDFC1D2176B2A1100601B5A /* icon-app.png */; };
 		8CF341731768648600A74663 /* bg-BackButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF3416C1768648600A74663 /* bg-BackButton.png */; };
 		8CF341741768648600A74663 /* bg-searchBar.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF3416D1768648600A74663 /* bg-searchBar.png */; };
 		8CF341751768648600A74663 /* icon-search.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF3416E1768648600A74663 /* icon-search.png */; };
@@ -77,6 +77,7 @@
 		8C184B3A176F0F9900E3444B /* PFCustomViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFCustomViewCell.h; sourceTree = "<group>"; };
 		8C184B3B176F0F9900E3444B /* PFCustomViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFCustomViewCell.m; sourceTree = "<group>"; };
 		8C184B3C176F0F9900E3444B /* PFCustomViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PFCustomViewCell.xib; sourceTree = "<group>"; };
+		8C27093C17700F3D00075709 /* icon-app.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon-app.png"; path = "../../../icon-app.png"; sourceTree = "<group>"; };
 		8C874D55176188110033ECBB /* PhotoFlickr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoFlickr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C874D59176188110033ECBB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8C874D5B176188110033ECBB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -111,7 +112,6 @@
 		8C874DE217618C700033ECBB /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
 		8C874E401761D40C0033ECBB /* XMLReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLReader.h; sourceTree = "<group>"; };
 		8C874E411761D40C0033ECBB /* XMLReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMLReader.m; sourceTree = "<group>"; };
-		8CDFC1D2176B2A1100601B5A /* icon-app.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon-app.png"; path = "../../../icon-app.png"; sourceTree = "<group>"; };
 		8CF3416C1768648600A74663 /* bg-BackButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-BackButton.png"; sourceTree = "<group>"; };
 		8CF3416D1768648600A74663 /* bg-searchBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-searchBar.png"; sourceTree = "<group>"; };
 		8CF3416E1768648600A74663 /* icon-search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-search.png"; sourceTree = "<group>"; };
@@ -342,7 +342,7 @@
 		8C874DB0176188710033ECBB /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				8CDFC1D2176B2A1100601B5A /* icon-app.png */,
+				8C27093C17700F3D00075709 /* icon-app.png */,
 				8CF34178176864CF00A74663 /* bg-InputSearchBar.png */,
 				8CF34179176864CF00A74663 /* bg-InputSearchBar1.png */,
 				8CF3416C1768648600A74663 /* bg-BackButton.png */,
@@ -450,11 +450,11 @@
 				8CF341751768648600A74663 /* icon-search.png in Resources */,
 				8CF3417A176864CF00A74663 /* bg-InputSearchBar.png in Resources */,
 				8CF3417B176864CF00A74663 /* bg-InputSearchBar1.png in Resources */,
-				8CDFC1D3176B2A1100601B5A /* icon-app.png in Resources */,
 				8C184AEF176EC87F00E3444B /* PFImageDetailViewController.xib in Resources */,
 				8C184AF1176EC87F00E3444B /* PFDetailPhotoViewController.xib in Resources */,
 				8C184AF3176EC87F00E3444B /* PFSearchViewController.xib in Resources */,
 				8C184B3E176F0F9900E3444B /* PFCustomViewCell.xib in Resources */,
+				8C27093D17700F3D00075709 /* icon-app.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

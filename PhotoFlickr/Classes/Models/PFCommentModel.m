@@ -16,29 +16,22 @@
 @synthesize _stringTextComment;
 @synthesize _stringUrlIConUserComment;
 
--(id)init {
+-(id)initWithData:(NSDictionary *)aPhotoData {
 
     self = [super init];
     if (self) {
-        
+        self._stringUserCommentName = [aPhotoData objectForKey:@"authorname"];
+        self._stringUserCommentIconfarm = [aPhotoData objectForKey:@"iconfarm"];
+        self._stringUserCommentIconserver = [aPhotoData objectForKey:@"iconserver"];
+        self._stringUserCommentId = [aPhotoData objectForKey:@"author"];
+        self._stringTextComment = [aPhotoData objectForKey:@"text"];
+        self._stringUrlIConUserComment = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/buddyicons/%@.jpg",self._stringUserCommentIconfarm,self._stringUserCommentIconserver,self._stringUserCommentId];
     }
     return self;
 }
--(PFCommentModel *)initWithData:(NSDictionary *)aPhotoData {
-    modelComment = [[PFCommentModel alloc] init];
-    modelComment._stringUserCommentName = [aPhotoData objectForKey:@"authorname"];
-    modelComment._stringUserCommentIconfarm = [aPhotoData objectForKey:@"iconfarm"];
-    modelComment._stringUserCommentIconserver = [aPhotoData objectForKey:@"iconserver"];
-    modelComment._stringUserCommentId = [aPhotoData objectForKey:@"author"];
-    modelComment._stringTextComment = [aPhotoData objectForKey:@"text"];
-    modelComment._stringUrlIConUserComment = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/buddyicons/%@.jpg",modelComment._stringUserCommentIconfarm,modelComment._stringUserCommentIconserver,modelComment._stringUserCommentId];
-    
-    return modelComment;
-}
 
 -(void)dealloc {
-
-    [modelComment release];
+    
     [_stringUserCommentName release];
     [_stringUserCommentIconfarm release];
     [_stringUserCommentIconserver release];

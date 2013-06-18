@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PFCommentPhotoViewItem : NSObject
+@interface PFCommentPhotoViewItem : UIView
 {
     UIView *_viewItemComment;
     UIImageView *_imageViewAvatarComment;

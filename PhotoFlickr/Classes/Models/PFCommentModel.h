@@ -17,16 +17,15 @@
     NSString *_stringUserCommentId;
     NSString *_stringTextComment;
     NSString *_stringUrlIConUserComment;
-    PFCommentModel *modelComment;
 }
 
-@property(nonatomic, strong) NSString *_stringUserCommentName;
-@property(nonatomic, strong) NSString *_stringUserCommentIconfarm;
-@property(nonatomic, strong) NSString *_stringUserCommentIconserver;
-@property(nonatomic, strong) NSString *_stringUserCommentId;
-@property(nonatomic, strong) NSString *_stringTextComment;
-@property(nonatomic, strong) NSString *_stringUrlIConUserComment;
+@property(nonatomic, retain) NSString *_stringUserCommentName;
+@property(nonatomic, retain) NSString *_stringUserCommentIconfarm;
+@property(nonatomic, retain) NSString *_stringUserCommentIconserver;
+@property(nonatomic, retain) NSString *_stringUserCommentId;
+@property(nonatomic, retain) NSString *_stringTextComment;
+@property(nonatomic, retain) NSString *_stringUrlIConUserComment;
 
--(PFCommentModel *)initWithData:(NSDictionary *)aPhotoData;
+-(id)initWithData:(NSDictionary *)aPhotoData;
 
 @end

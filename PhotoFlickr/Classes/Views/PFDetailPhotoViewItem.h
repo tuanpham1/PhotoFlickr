@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PFDetailPhotoViewItem : NSObject
+@interface PFDetailPhotoViewItem : UIView
 {
     
     UIScrollView *_scrollViewItem;

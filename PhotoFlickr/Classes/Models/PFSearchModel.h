@@ -23,21 +23,20 @@
     NSString *_stringUrlPhotoSize240;
     NSString *_stringUrlPhotoSize1024;
     NSString *_stringViewCountPhoto;
-    PFSearchModel *modelSearch;
     PFSearchPhotoService *searchPhotoService;
 }
-@property(nonatomic,strong) NSString *_stringPhotoID;
-@property(nonatomic,strong) NSString *_stringTitlePhoto;
-@property(nonatomic,strong) NSString *_stringNameUser;
-@property(nonatomic,strong) NSString *_stringRealNameUser;
-@property(nonatomic,strong) NSString *_stringLocationUser;
-@property(nonatomic,strong) NSString *_stringUrlIConUser;
-@property(nonatomic,strong) NSString *_stringDatePhotoUpload;
-@property(nonatomic,strong) NSString *_stringDescriptionPhoto;
-@property(nonatomic,strong) NSString *_stringUrlPhotoSize150;
-@property(nonatomic,strong) NSString *_stringUrlPhotoSize240;
-@property(nonatomic,strong)  NSString *_stringUrlPhotoSize1024;
-@property(nonatomic,strong)  NSString *_stringViewCountPhoto;
+@property(nonatomic,retain) NSString *_stringPhotoID;
+@property(nonatomic,retain) NSString *_stringTitlePhoto;
+@property(nonatomic,retain) NSString *_stringNameUser;
+@property(nonatomic,retain) NSString *_stringRealNameUser;
+@property(nonatomic,retain) NSString *_stringLocationUser;
+@property(nonatomic,retain) NSString *_stringUrlIConUser;
+@property(nonatomic,retain) NSString *_stringDatePhotoUpload;
+@property(nonatomic,retain) NSString *_stringDescriptionPhoto;
+@property(nonatomic,retain) NSString *_stringUrlPhotoSize150;
+@property(nonatomic,retain) NSString *_stringUrlPhotoSize240;
+@property(nonatomic,retain)  NSString *_stringUrlPhotoSize1024;
+@property(nonatomic,retain)  NSString *_stringViewCountPhoto;
 
--(PFSearchModel *)initWithData:(NSDictionary *)aPhotoData;
+-(id)initWithData:(NSDictionary *)aPhotoData;
 @end

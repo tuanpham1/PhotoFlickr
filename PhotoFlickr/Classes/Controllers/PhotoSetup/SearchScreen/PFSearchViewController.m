@@ -218,6 +218,7 @@
                 NSDictionary *dictionaryPhotoItem = [mutableArraySaveResuilData objectAtIndex:i];
                 PFSearchModel *modelSearch = [[PFSearchModel alloc] initWithData:dictionaryPhotoItem];
                 [mutableArraySaveDataCell addObject:modelSearch];
+                
                 RELEASE_OBJECT(modelSearch);
             }
         }
@@ -250,7 +251,7 @@
     if (mutableArraySaveDataCell.count > 0) {
         
         PFSearchModel *modelSearch = [mutableArraySaveDataCell objectAtIndex:indexPath.row];
-        [cell.imageViewAvatar setImageWithURL:[NSURL URLWithString:modelSearch._stringUrlIConUser]];
+        [cell.imageViewAvatar setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@", modelSearch._stringUrlIConUser]]];
         cell.labelNameUser.text = modelSearch._stringNameUser;
         cell.labelLocationUser.text = modelSearch._stringLocationUser;
         cell.labelDateUpload.text = modelSearch._stringDatePhotoUpload;
